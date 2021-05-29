@@ -40,7 +40,7 @@ class PersonDatabase{
   } 
 
 
-  Future<List<PersonModel>> obtenerPersonaPorId(String id) async {
+  Future<List<PersonModel>> obtenerPersonaPorDni(String id) async {
     final db = await dbprovider.database;
     final res =
     await db.rawQuery("SELECT * FROM Persona WHERE dni='$id'");

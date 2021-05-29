@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:help_desk_app/api/usuario_api.dart';
 import 'package:help_desk_app/bloc/bloc_cargando.dart';
-import 'package:help_desk_app/bloc/provider_bloc.dart'; 
+import 'package:help_desk_app/bloc/provider_bloc.dart';
 import 'package:help_desk_app/models/Usuario_model.dart';
 import 'package:help_desk_app/models/person_model.dart';
 import 'package:help_desk_app/utils/responsive.dart';
 import 'package:provider/provider.dart';
 
-class RegistrarUsuario extends StatefulWidget {
-  const RegistrarUsuario({Key key}) : super(key: key);
+class EditarUsario extends StatefulWidget {
+  const EditarUsario({Key key, @required this.usuario}) : super(key: key);
+
+  final UsuarioModel usuario;
 
   @override
-  _RegistrarUsuarioState createState() => _RegistrarUsuarioState();
+  _EditarUsarioState createState() => _EditarUsarioState();
 }
 
-class _RegistrarUsuarioState extends State<RegistrarUsuario> {
+class _EditarUsarioState extends State<EditarUsario> {
   TextEditingController _userController = new TextEditingController();
   TextEditingController _passController = new TextEditingController();
   TextEditingController _emailController = new TextEditingController();
@@ -44,7 +46,7 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Registrar Usuario'),
+        title: Text('Editar Usuario'),
       ),
       body: ValueListenableBuilder(
           valueListenable: provider.cargando,
@@ -61,6 +63,96 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: responsive.wp(0),
+                          ),
+                          child: Text(
+                            'Datos Actuales',
+                            style: TextStyle(
+                                fontSize: responsive.ip(2),
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                        Divider(),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: responsive.wp(0),
+                          ),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Usuario :',
+                                style: TextStyle(
+                                    fontSize: responsive.ip(1.6),
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              Text(
+                                '${widget.usuario.user}',
+                                style: TextStyle(
+                                    fontSize: responsive.ip(1.6),
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: responsive.wp(0),
+                          ),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Email :',
+                                style: TextStyle(
+                                    fontSize: responsive.ip(1.6),
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              Text(
+                                '${widget.usuario.email}',
+                                style: TextStyle(
+                                    fontSize: responsive.ip(1.6),
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: responsive.wp(0),
+                          ),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Teléfono :',
+                                style: TextStyle(
+                                    fontSize: responsive.ip(1.6),
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              Text(
+                                '${widget.usuario.telefono}',
+                                style: TextStyle(
+                                    fontSize: responsive.ip(1.6),
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: responsive.hp(5),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: responsive.wp(0),
+                          ),
+                          child: Text(
+                            'Actualizar Datos',
+                            style: TextStyle(
+                                fontSize: responsive.ip(2),
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                        Divider(),
                         Text(
                           'Usuario ',
                           style: TextStyle(
@@ -165,8 +257,7 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
                                 ),
                                 hintText: 'Email'),
                             validator: (value) {
-                              if (value.isNotEmpty) {
-                                 
+                              if (value.isNotEmpty) { 
                                 return null;
                               } else {
                                 return 'El campo no debe estar vacio';
@@ -218,16 +309,7 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
                             controller: _telefonoController,
                           ),
                         ),
-                        Text(
-                          'Persona :',
-                          style: TextStyle(
-                              fontSize: responsive.ip(1.6),
-                              fontWeight: FontWeight.w600),
-                        ),
-                        SizedBox(
-                          height: responsive.hp(1),
-                        ),
-                        _selectperson(context, responsive),
+                         
                         SizedBox(
                           height: responsive.hp(1),
                         ),
@@ -247,15 +329,15 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
                                 ),
                               ),
                               onPressed: () async {
-                                if (keyForm.currentState.validate()) {
-                                  if (idPerson != 'Seleccionar') {
+                                if (keyForm.currentState.validate()) { 
                                     final usuarioBloc =
                                         ProviderBloc.usuario(context);
 
                                     final usuarioApi = UsuarioApi();
 
                                     UsuarioModel usuarioModel = UsuarioModel();
-                                    usuarioModel.dni = idPerson;
+                                    usuarioModel.idUsuario = widget.usuario.idUsuario;
+                                    usuarioModel.dni = widget.usuario.dni;
                                     usuarioModel.user = _userController.text;
                                     usuarioModel.pass = _passController.text;
                                     usuarioModel.email = _emailController.text;
@@ -264,7 +346,7 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
 
                                     provider.setValor(true);
                                     final res = await usuarioApi
-                                        .guardarUsuario(usuarioModel);
+                                        .editarUsuario(usuarioModel);
 
                                     provider.setValor(false);
 
@@ -286,10 +368,7 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
                                     _telefonoController.text = '';
                                     dropdownPerson = 'Seleccionar';
                                     usuarioBloc.obtenerUsuarios();
-                                  } else {
-                                    print(
-                                        'debe Seleccionar un nivel de Usuario ');
-                                  }
+                                   
                                 }
                               },
                             )
@@ -314,126 +393,7 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
           }),
     );
   }
-
-  Widget _selectperson(BuildContext context, Responsive responsive) {
-    final personBloc = ProviderBloc.person(context);
-    personBloc.obtenerPersonas();
-    return StreamBuilder(
-      stream: personBloc.personasStream,
-      builder:
-          (BuildContext context, AsyncSnapshot<List<PersonModel>> snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data.length > 0) {
-            if (cantItemsPersom == 0) {
-              listPersom.clear();
-
-              listPersom.add('Seleccionar');
-              for (int i = 0; i < snapshot.data.length; i++) {
-                String nombreCanchas =
-                    '${snapshot.data[i].nombre} ${snapshot.data[i].apellido}';
-                listPersom.add(nombreCanchas);
-              }
-              dropdownPerson = "Seleccionar";
-            }
-            return _person(responsive, snapshot.data, listPersom);
-          } else {
-            listPersom.clear();
-
-            listPersom.add('Seleccionar');
-            dropdownPerson = "Seleccionar";
-
-            return _person(responsive, [], listPersom);
-          }
-        } else {
-          listPersom.clear();
-
-          listPersom.add('Seleccionar');
-          dropdownPerson = "Seleccionar";
-
-          return _person(responsive, [], listPersom);
-        }
-      },
-    );
-  }
-
-  Widget _person(
-      Responsive responsive, List<PersonModel> equipos, List<String> equipe) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: responsive.wp(0),
-          ),
-          width: double.infinity,
-          height: responsive.hp(4),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(
-              Radius.circular(5),
-            ),
-            border: Border.all(color: Colors.black26),
-          ),
-          child: DropdownButton<String>(
-            dropdownColor: Colors.white,
-            value: dropdownPerson,
-            isExpanded: true,
-            icon: Icon(Icons.arrow_drop_down),
-            iconSize: 24,
-            elevation: 16,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: responsive.ip(1.5),
-            ),
-            underline: Container(),
-            onChanged: (String data) {
-              setState(() {
-                dropdownPerson = data;
-                cantItemsPersom++;
-                obtenerIdNivelUsuario(data, equipos);
-
-                //areaBloc.obtenerAreas();
-                //dropdownEquipos(data,equipos);
-              });
-            },
-            items: equipe.map(
-              (e) {
-                return DropdownMenuItem<String>(
-                  value: e,
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      e,
-                      maxLines: 3,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: responsive.ip(1.5),
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                );
-              },
-            ).toList(),
-          ),
-        ),
-      ],
-    );
-  }
-
-  void obtenerIdNivelUsuario(String dato, List<PersonModel> list) {
-    if (dato == 'Seleccionar') {
-      idPerson = 'Seleccionar';
-    } else {
-      for (int i = 0; i < list.length; i++) {
-        if (dato == '${list[i].nombre} ${list[i].apellido}') {
-          idPerson = list[i].dni.toString();
-        }
-      }
-    }
-    print('idEquipo $idPerson');
-  }
-
+ 
   void registroCorrecto(String texto) {
     showDialog(
       context: context,

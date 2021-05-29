@@ -10,8 +10,8 @@ class UsuarioDatabase {
       final db = await dbprovider.database;
 
       final res = await db.rawInsert(
-          "INSERT OR REPLACE INTO Usuario (idPerson,user,pass,email,telefono) "
-          "VALUES ('${usuarioModel.idPerson}','${usuarioModel.user}','${usuarioModel.pass}','${usuarioModel.email}',"
+          "INSERT OR REPLACE INTO Usuario (idUsuario,dni,user,pass,email,telefono) "
+          "VALUES ('${usuarioModel.idUsuario}','${usuarioModel.dni}','${usuarioModel.user}','${usuarioModel.pass}','${usuarioModel.email}',"
           "'${usuarioModel.telefono}')");
       return res;
     } catch (exception) {
@@ -38,4 +38,16 @@ class UsuarioDatabase {
 
     return list;
   }
+
+
+
+
+  deleteUsuarioPorId(String id) async {
+    final db = await dbprovider.database;
+
+    final res = await db.rawDelete('DELETE FROM Usuario where idUsuario="$id"');
+
+    return res;
+  }
+
 }

@@ -43,7 +43,8 @@ class DatabaseProvider {
             ')');
 
         await db.execute(' CREATE TABLE Usuario('
-            ' idPerson TEXT PRIMARY KEY,'
+            ' idUsuario TEXT PRIMARY KEY,'
+            ' dni TEXT,'
             ' user TEXT,'
             ' pass TEXT,'
             ' email TEXT,'

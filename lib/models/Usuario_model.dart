@@ -1,5 +1,6 @@
 class UsuarioModel {
-  String idPerson;
+  String idUsuario;
+  String dni;
   String user;
   String pass;
   String email;
@@ -9,7 +10,8 @@ class UsuarioModel {
   String areaNombre;
 
   UsuarioModel({
-    this.idPerson,
+    this.idUsuario,
+    this.dni,
     this.user,
     this.pass,
     this.email,
@@ -20,7 +22,8 @@ class UsuarioModel {
   });
 
   factory UsuarioModel.fromJson(Map<String, dynamic> json) => UsuarioModel(
-        idPerson: json["idPerson"],
+        idUsuario: json["idUsuario"],
+        dni: json["dni"],
         user: json["user"],
         pass: json["pass"],
         email: json["email"],
