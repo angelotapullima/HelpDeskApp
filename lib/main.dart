@@ -14,6 +14,8 @@ import 'package:help_desk_app/utils/responsive.dart';
 import 'package:help_desk_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 
+import 'pages/Screens/Mantenimiento/NivelUsuario/nivel_usuario_page.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -185,6 +187,28 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ],
         );
+      case NavItem.nivelUsuario:
+        return Row(
+          children: [
+            Icon(Icons.view_comfortable_rounded),
+            SizedBox(
+              width: res.wp(2),
+            ),
+            Text(
+              'Manteniento ',
+              style: TextStyle(
+                fontSize: res.ip(2),
+              ),
+            ),
+            Icon(Icons.chevron_right),
+            Text(
+              'Areas ',
+              style: TextStyle(
+                fontSize: res.ip(2),
+              ),
+            ),
+          ],
+        );
       case NavItem.gestion:
         return 'My Cart';
       case NavItem.errores:
@@ -212,6 +236,9 @@ class _MyHomePageState extends State<MyHomePage> {
         return GerenciaPage();
       case NavItem.area:
         return AreaPage();
+      case NavItem.nivelUsuario:
+        return NivelUsuarioPage();
+
       case NavItem.gestion:
         return Center(
           child: Text(

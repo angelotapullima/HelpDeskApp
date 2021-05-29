@@ -1,28 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:help_desk_app/api/gerencia_api.dart';
+import 'package:help_desk_app/api/nivel_usuario_api.dart';
 import 'package:help_desk_app/bloc/bloc_cargando.dart';
 import 'package:help_desk_app/bloc/provider_bloc.dart';
 import 'package:help_desk_app/utils/responsive.dart';
 import 'package:provider/provider.dart';
 
-class EditarGerencia extends StatefulWidget {
-  const EditarGerencia(
-      {Key key, @required this.idGerencia, @required this.nombreGerencia})
+class EditarNivelUsuario extends StatefulWidget {
+  const EditarNivelUsuario(
+      {Key key, @required this.idNivel, @required this.nombreNivel})
       : super(key: key);
 
-  final String idGerencia;
-  final String nombreGerencia;
+  final String idNivel;
+  final String nombreNivel;
 
   @override
-  _EditarGerenciaState createState() => _EditarGerenciaState();
+  _EditarNivelUsuarioState createState() => _EditarNivelUsuarioState();
 }
 
-class _EditarGerenciaState extends State<EditarGerencia> {
-  TextEditingController _gerenciaController = new TextEditingController();
+class _EditarNivelUsuarioState extends State<EditarNivelUsuario> {
+  TextEditingController _nivelController = new TextEditingController();
 
   @override
   void dispose() {
-    _gerenciaController.dispose();
+    _nivelController.dispose();
 
     super.dispose();
   }
@@ -31,7 +32,7 @@ class _EditarGerenciaState extends State<EditarGerencia> {
   Widget build(BuildContext context) {
     final responsive = Responsive.of(context);
 
-    final gerenciaBloc = ProviderBloc.of(context);
+    final nivelUsuarioBloc = ProviderBloc.nivelU(context);
 
     final provider = Provider.of<BlocCargando>(context, listen: false);
     return Scaffold(
@@ -71,7 +72,7 @@ class _EditarGerenciaState extends State<EditarGerencia> {
                         height: responsive.hp(4),
                         child: Center(
                           child: Text(
-                            '${widget.nombreGerencia}',
+                            '${widget.nombreNivel}',
                             style: TextStyle(fontSize: responsive.ip(1.6)),
                           ),
                         ),
@@ -104,9 +105,9 @@ class _EditarGerenciaState extends State<EditarGerencia> {
                                 color: Colors.black45,
                                 fontSize: responsive.ip(1.7),
                               ),
-                              hintText: 'Nombre Gerencia'),
+                              hintText: 'Nivel'),
                           enableInteractiveSelection: false,
-                          controller: _gerenciaController,
+                          controller: _nivelController,
                         ),
                       ),
                       SizedBox(
@@ -118,13 +119,12 @@ class _EditarGerenciaState extends State<EditarGerencia> {
                           MaterialButton(
                             color: Colors.blue,
                             onPressed: () async {
-                              if (_gerenciaController.text.length > 0) {
-                                final gerenciaApi = GerenciaApi();
-
+                              if (_nivelController.text.length > 0) {
+                                final nivelUsuarioApi = NivelUsuarioApi();
                                 provider.setValor(true);
-                                final res = await gerenciaApi.editarGerencia(
-                                    widget.idGerencia,
-                                    _gerenciaController.text);
+                                final res =
+                                    await nivelUsuarioApi.editarNivelUsuario(
+                                        widget.idNivel, _nivelController.text);
 
                                 provider.setValor(false);
 
@@ -134,10 +134,8 @@ class _EditarGerenciaState extends State<EditarGerencia> {
                                   registroCorrecto('Registro fallido');
                                 }
 
-                                _gerenciaController.text = '';
-                                gerenciaBloc.obtenerGerencias();
-
-                                
+                                _nivelController.text = '';
+                                nivelUsuarioBloc.obtenerNivelesDeUsuario();
                               } else {
                                 print(
                                     'debe registar un nombre para la gerencia');
@@ -194,7 +192,8 @@ class _EditarGerenciaState extends State<EditarGerencia> {
           actions: <Widget>[
             MaterialButton(
               onPressed: () async {
-                Navigator.pop(context);Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
               },
               child: Text('Continuar'),
             ),

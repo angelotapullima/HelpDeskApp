@@ -41,4 +41,15 @@ class NivelUsuarioDatabase {
 
     return list;
   }
+
+
+
+
+  deleteNivelUsuarioPorId(String  id) async {
+    final db = await dbprovider.database;
+
+    final res = await db.rawDelete('DELETE FROM NivelUsuario where idNivel="$id"');
+
+    return res;
+  }
 }

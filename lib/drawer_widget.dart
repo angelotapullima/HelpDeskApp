@@ -25,6 +25,7 @@ class NavDrawerWidget extends StatelessWidget {
           _NavigationItem(false, NavItem.errores, "Errores", Icons.home),
           _NavigationItem(false, NavItem.gerencia, "Gerencia", Icons.person),
           _NavigationItem(false, NavItem.area, "Area", Icons.person),
+          _NavigationItem(false, NavItem.nivelUsuario, "Nivel de Usuario", Icons.person),
         ],
         nombre: 'Mantenimiento'),
     _NavHeader(
