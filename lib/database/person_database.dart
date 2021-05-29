@@ -15,8 +15,8 @@ class PersonDatabase{
       final db = await dbprovider.database;
 
       final res = await db.rawInsert(
-          "INSERT OR REPLACE INTO Persona (dni,nombre,apellido,idGerencia,idArea,nivelUsuario) "
-          "VALUES ('${personModel.dni}','${personModel.nombre}','${personModel.apellido}','${personModel.idGerencia}',"
+          "INSERT OR REPLACE INTO Persona (idPerson,dni,nombre,apellido,idGerencia,idArea,nivelUsuario) "
+          "VALUES ('${personModel.idPerson}','${personModel.dni}','${personModel.nombre}','${personModel.apellido}','${personModel.idGerencia}',"
           "'${personModel.idArea}','${personModel.nivelUsuario}')");
       return res;
 

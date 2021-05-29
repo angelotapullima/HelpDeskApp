@@ -365,7 +365,7 @@ class _RegistroNivelUsuarioState extends State<RegistroNivelUsuario> {
           title: Column(
             children: <Widget>[
               Text(
-                'Registro completo',
+                '$texto',
                 style: TextStyle(
                   fontSize: responsive.ip(2),
                 ),

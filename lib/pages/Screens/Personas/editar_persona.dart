@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:help_desk_app/api/person_api.dart';
+import 'package:help_desk_app/bloc/bloc_cargando.dart';
 import 'package:help_desk_app/bloc/provider_bloc.dart';
-import 'package:help_desk_app/database/person_database.dart';
 import 'package:help_desk_app/models/area_model.dart';
 import 'package:help_desk_app/models/gerencia_model.dart';
 import 'package:help_desk_app/models/nivel_usuario_model.dart';
 import 'package:help_desk_app/models/person_model.dart';
 import 'package:help_desk_app/utils/responsive.dart';
+import 'package:provider/provider.dart';
 
 class EditarPersona extends StatefulWidget {
   const EditarPersona({Key key, @required this.person}) : super(key: key);
@@ -19,6 +21,7 @@ class EditarPersona extends StatefulWidget {
 class _EditarPersonaState extends State<EditarPersona> {
   TextEditingController _nombreController = new TextEditingController();
   TextEditingController _apellidoController = new TextEditingController();
+  TextEditingController _dniController = new TextEditingController();
 
   String dropdownNivelU = '';
   List<String> listNivelU = [];
@@ -34,412 +37,484 @@ class _EditarPersonaState extends State<EditarPersona> {
   //datos Area
   String dropdownArea = '';
   List<String> listArea = [];
-  int cantItemsArea = 0;
+  bool cantItemsArea = true;
   String idArea = 'Seleccionar';
 
   final keyForm = GlobalKey<FormState>();
 
   @override
+  void dispose() {
+    _nombreController.dispose();
+    _apellidoController.dispose();
+    _dniController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final responsive = Responsive.of(context);
+    final provider = Provider.of<BlocCargando>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text('Editar Persona'),
       ),
-      body: Form(
-        key: keyForm,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: responsive.hp(2),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: responsive.wp(5),
-                ),
-                child: Text(
-                  'Datos Actuales',
-                  style: TextStyle(
-                      fontSize: responsive.ip(2), fontWeight: FontWeight.w600),
-                ),
-              ),
-              Divider(),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: responsive.wp(5),
-                ),
-                child: Row(
-                  children: [
-                    Text(
-                      'Dni :',
-                      style: TextStyle(
-                          fontSize: responsive.ip(1.6),
-                          fontWeight: FontWeight.w600),
-                    ),
-                    Text(
-                      '${widget.person.dni}',
-                      style: TextStyle(
-                          fontSize: responsive.ip(1.6),
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: responsive.hp(1),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: responsive.wp(5),
-                ),
-                child: Row(
-                  children: [
-                    Text(
-                      'Nombre :',
-                      style: TextStyle(
-                          fontSize: responsive.ip(1.6),
-                          fontWeight: FontWeight.w600),
-                    ),
-                    Text(
-                      '${widget.person.nombre}',
-                      style: TextStyle(
-                          fontSize: responsive.ip(1.6),
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: responsive.hp(1),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: responsive.wp(5),
-                ),
-                child: Row(
-                  children: [
-                    Text(
-                      'Apellido :',
-                      style: TextStyle(
-                          fontSize: responsive.ip(1.6),
-                          fontWeight: FontWeight.w600),
-                    ),
-                    Text(
-                      '${widget.person.apellido}',
-                      style: TextStyle(
-                          fontSize: responsive.ip(1.6),
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: responsive.hp(1),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: responsive.wp(5),
-                ),
-                child: Row(
-                  children: [
-                    Text(
-                      'Gerencia :',
-                      style: TextStyle(
-                          fontSize: responsive.ip(1.6),
-                          fontWeight: FontWeight.w600),
-                    ),
-                    Text(
-                      '${widget.person.nombreGerencia}',
-                      style: TextStyle(
-                          fontSize: responsive.ip(1.6),
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: responsive.hp(1),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: responsive.wp(5),
-                ),
-                child: Row(
-                  children: [
-                    Text(
-                      'Área :',
-                      style: TextStyle(
-                          fontSize: responsive.ip(1.6),
-                          fontWeight: FontWeight.w600),
-                    ),
-                    Text(
-                      '${widget.person.nombreArea}',
-                      style: TextStyle(
-                          fontSize: responsive.ip(1.6),
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: responsive.hp(1),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: responsive.wp(5),
-                ),
-                child: Row(
-                  children: [
-                    Text(
-                      'Nivel Usuario :',
-                      style: TextStyle(
-                          fontSize: responsive.ip(1.6),
-                          fontWeight: FontWeight.w600),
-                    ),
-                    Text(
-                      '${widget.person.nombreNivelUsuario}',
-                      style: TextStyle(
-                          fontSize: responsive.ip(1.6),
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: responsive.hp(5),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: responsive.wp(5),
-                ),
-                child: Text(
-                  'Actualizar Datos',
-                  style: TextStyle(
-                      fontSize: responsive.ip(2), fontWeight: FontWeight.w600),
-                ),
-              ),
-              Divider(),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: responsive.wp(5),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Dni :',
-                      style: TextStyle(
-                          fontSize: responsive.ip(1.6),
-                          fontWeight: FontWeight.w600),
-                    ),
-                    SizedBox(
-                      height: responsive.hp(1),
-                    ),
-                    Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: responsive.wp(2),
-                        ),
-                        color: Colors.grey[200],
-                        height: responsive.hp(5),
-                        child: Center(
-                            child: Text(
-                          '${widget.person.dni}',
-                          style: TextStyle(fontSize: responsive.ip(1.5)),
-                        ))),
-                    SizedBox(
-                      height: responsive.hp(1),
-                    ),
-                    Text(
-                      'Nombre :',
-                      style: TextStyle(
-                          fontSize: responsive.ip(1.6),
-                          fontWeight: FontWeight.w600),
-                    ),
-                    SizedBox(
-                      height: responsive.hp(1),
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: responsive.wp(2),
-                      ),
-                      color: Colors.grey[200],
-                      height: responsive.hp(5),
-                      child: TextFormField(
-                        cursorColor: Colors.transparent,
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintStyle: TextStyle(
-                              color: Colors.black45,
-                              fontSize: responsive.ip(1.7),
-                            ),
-                            hintText: 'Nombre'),
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'El campo no debe estar vacio';
-                          } else {
-                            return null;
-                          }
-                        },
-                        enableInteractiveSelection: false,
-                        controller: _nombreController,
-                      ),
-                    ),
-                    SizedBox(
-                      height: responsive.hp(2),
-                    ),
-                    Text(
-                      'Apellidos :',
-                      style: TextStyle(
-                          fontSize: responsive.ip(1.6),
-                          fontWeight: FontWeight.w600),
-                    ),
-                    SizedBox(
-                      height: responsive.hp(1),
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: responsive.wp(2),
-                      ),
-                      color: Colors.grey[200],
-                      height: responsive.hp(5),
-                      child: TextFormField(
-                        cursorColor: Colors.transparent,
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintStyle: TextStyle(
-                              color: Colors.black45,
-                              fontSize: responsive.ip(1.7),
-                            ),
-                            hintText: 'Apellidos'),
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'El campo no debe estar vacio';
-                          } else {
-                            return null;
-                          }
-                        },
-                        enableInteractiveSelection: false,
-                        controller: _apellidoController,
-                      ),
-                    ),
-                    SizedBox(
-                      height: responsive.hp(1),
-                    ),
-                    Text(
-                      'Gerencia :',
-                      style: TextStyle(
-                          fontSize: responsive.ip(1.6),
-                          fontWeight: FontWeight.w600),
-                    ),
-                    SizedBox(
-                      height: responsive.hp(1),
-                    ),
-                    _selecGerencia(context, responsive),
-                    SizedBox(
-                      height: responsive.hp(1),
-                    ),
-                    Text(
-                      'Area :',
-                      style: TextStyle(
-                          fontSize: responsive.ip(1.6),
-                          fontWeight: FontWeight.w600),
-                    ),
-                    SizedBox(
-                      height: responsive.hp(1),
-                    ),
-                    _selectArea(context, responsive),
-                    SizedBox(
-                      height: responsive.hp(1),
-                    ),
-                    Text(
-                      'Nivel de usuario :',
-                      style: TextStyle(
-                          fontSize: responsive.ip(1.6),
-                          fontWeight: FontWeight.w600),
-                    ),
-                    _seleNivelUsuario(context, responsive),
-                    SizedBox(
-                      height: responsive.hp(1),
-                    ),
-                    Row(
+      body: ValueListenableBuilder(
+          valueListenable: provider.cargando,
+          builder: (BuildContext context, bool data, Widget child) {
+            return Stack(
+              children: [
+                Form(
+                  key: keyForm,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Spacer(),
-                        MaterialButton(
-                          color: Colors.blue,
-                          child: Text(
-                            'Registrar',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: responsive.ip(2),
-                            ),
+                        SizedBox(
+                          height: responsive.hp(2),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: responsive.wp(5),
                           ),
-                          onPressed: () async {
-                            if (keyForm.currentState.validate()) {
-                              if (idGerencia != 'Seleccionar') {
-                                if (idArea != 'Seleccionar') {
-                                  if (idNivelU != 'Selccionar') {
-                                    final personaDatabase = PersonDatabase();
+                          child: Text(
+                            'Datos Actuales',
+                            style: TextStyle(
+                                fontSize: responsive.ip(2),
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                        Divider(),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: responsive.wp(5),
+                          ),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Dni :',
+                                style: TextStyle(
+                                    fontSize: responsive.ip(1.6),
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              Text(
+                                '${widget.person.dni}',
+                                style: TextStyle(
+                                    fontSize: responsive.ip(1.6),
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: responsive.hp(1),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: responsive.wp(5),
+                          ),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Nombre :',
+                                style: TextStyle(
+                                    fontSize: responsive.ip(1.6),
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              Text(
+                                '${widget.person.nombre}',
+                                style: TextStyle(
+                                    fontSize: responsive.ip(1.6),
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: responsive.hp(1),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: responsive.wp(5),
+                          ),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Apellido :',
+                                style: TextStyle(
+                                    fontSize: responsive.ip(1.6),
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              Text(
+                                '${widget.person.apellido}',
+                                style: TextStyle(
+                                    fontSize: responsive.ip(1.6),
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: responsive.hp(1),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: responsive.wp(5),
+                          ),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Gerencia :',
+                                style: TextStyle(
+                                    fontSize: responsive.ip(1.6),
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              Text(
+                                '${widget.person.nombreGerencia}',
+                                style: TextStyle(
+                                    fontSize: responsive.ip(1.6),
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: responsive.hp(1),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: responsive.wp(5),
+                          ),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Área :',
+                                style: TextStyle(
+                                    fontSize: responsive.ip(1.6),
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              Text(
+                                '${widget.person.nombreArea}',
+                                style: TextStyle(
+                                    fontSize: responsive.ip(1.6),
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: responsive.hp(1),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: responsive.wp(5),
+                          ),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Nivel Usuario :',
+                                style: TextStyle(
+                                    fontSize: responsive.ip(1.6),
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              Text(
+                                '${widget.person.nombreNivelUsuario}',
+                                style: TextStyle(
+                                    fontSize: responsive.ip(1.6),
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: responsive.hp(5),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: responsive.wp(5),
+                          ),
+                          child: Text(
+                            'Actualizar Datos',
+                            style: TextStyle(
+                                fontSize: responsive.ip(2),
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                        Divider(),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: responsive.wp(5),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Dni :',
+                                style: TextStyle(
+                                    fontSize: responsive.ip(1.6),
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              SizedBox(
+                                height: responsive.hp(1),
+                              ),
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: responsive.wp(2),
+                                ),
+                                color: Colors.grey[200],
+                                height: responsive.hp(5),
+                                child: TextFormField(
+                                  cursorColor: Colors.transparent,
+                                  keyboardType: TextInputType.text,
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintStyle: TextStyle(
+                                        color: Colors.black45,
+                                        fontSize: responsive.ip(1.7),
+                                      ),
+                                      hintText: 'Dni'),
+                                  validator: (value) {
+                                    if (value.isEmpty) {
+                                      return 'El campo no debe estar vacio';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  enableInteractiveSelection: false,
+                                  controller: _dniController,
+                                ),
+                              ),
+                              SizedBox(
+                                height: responsive.hp(1),
+                              ),
+                              Text(
+                                'Nombre :',
+                                style: TextStyle(
+                                    fontSize: responsive.ip(1.6),
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              SizedBox(
+                                height: responsive.hp(1),
+                              ),
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: responsive.wp(2),
+                                ),
+                                color: Colors.grey[200],
+                                height: responsive.hp(5),
+                                child: TextFormField(
+                                  cursorColor: Colors.transparent,
+                                  keyboardType: TextInputType.text,
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintStyle: TextStyle(
+                                        color: Colors.black45,
+                                        fontSize: responsive.ip(1.7),
+                                      ),
+                                      hintText: 'Nombre'),
+                                  validator: (value) {
+                                    if (value.isEmpty) {
+                                      return 'El campo no debe estar vacio';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  enableInteractiveSelection: false,
+                                  controller: _nombreController,
+                                ),
+                              ),
+                              SizedBox(
+                                height: responsive.hp(2),
+                              ),
+                              Text(
+                                'Apellidos :',
+                                style: TextStyle(
+                                    fontSize: responsive.ip(1.6),
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              SizedBox(
+                                height: responsive.hp(1),
+                              ),
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: responsive.wp(2),
+                                ),
+                                color: Colors.grey[200],
+                                height: responsive.hp(5),
+                                child: TextFormField(
+                                  cursorColor: Colors.transparent,
+                                  keyboardType: TextInputType.text,
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintStyle: TextStyle(
+                                        color: Colors.black45,
+                                        fontSize: responsive.ip(1.7),
+                                      ),
+                                      hintText: 'Apellidos'),
+                                  validator: (value) {
+                                    if (value.isEmpty) {
+                                      return 'El campo no debe estar vacio';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  enableInteractiveSelection: false,
+                                  controller: _apellidoController,
+                                ),
+                              ),
+                              SizedBox(
+                                height: responsive.hp(1),
+                              ),
+                              Text(
+                                'Gerencia :',
+                                style: TextStyle(
+                                    fontSize: responsive.ip(1.6),
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              SizedBox(
+                                height: responsive.hp(1),
+                              ),
+                              _selecGerencia(context, responsive),
+                              SizedBox(
+                                height: responsive.hp(1),
+                              ),
+                              Text(
+                                'Area :',
+                                style: TextStyle(
+                                    fontSize: responsive.ip(1.6),
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              SizedBox(
+                                height: responsive.hp(1),
+                              ),
+                              _selectArea(context, responsive),
+                              SizedBox(
+                                height: responsive.hp(1),
+                              ),
+                              Text(
+                                'Nivel de usuario :',
+                                style: TextStyle(
+                                    fontSize: responsive.ip(1.6),
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              _seleNivelUsuario(context, responsive),
+                              SizedBox(
+                                height: responsive.hp(1),
+                              ),
+                              Row(
+                                children: [
+                                  Spacer(),
+                                  MaterialButton(
+                                    color: Colors.blue,
+                                    child: Text(
+                                      'Registrar',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: responsive.ip(2),
+                                      ),
+                                    ),
+                                    onPressed: () async {
+                                      if (keyForm.currentState.validate()) {
+                                        if (idGerencia != 'Seleccionar') {
+                                          if (idArea != 'Seleccionar') {
+                                            if (idNivelU != 'Selccionar') {
+                                              final personApi = PersonApi();
 
-                                    PersonModel personaModel = PersonModel();
-                                    personaModel.dni = widget.person.dni;
-                                    personaModel.nombre =
-                                        _nombreController.text;
-                                    personaModel.apellido =
-                                        _apellidoController.text;
-                                    personaModel.idGerencia = idGerencia;
-                                    personaModel.idArea = idArea;
-                                    personaModel.nivelUsuario = idNivelU;
+                                              PersonModel personaModel =
+                                                  PersonModel();
+                                              personaModel.idPerson =
+                                                  widget.person.idPerson;
+                                              personaModel.dni =
+                                                  _dniController.text;
+                                              personaModel.nombre =
+                                                  _nombreController.text;
+                                              personaModel.apellido =
+                                                  _apellidoController.text;
+                                              personaModel.idGerencia =
+                                                  idGerencia;
+                                              personaModel.idArea = idArea;
+                                              personaModel.nivelUsuario =
+                                                  idNivelU;
 
-                                    await personaDatabase
-                                        .insertarPersona(personaModel);
+                                              provider.setValor(true);
+                                              final res = await personApi
+                                                  .editarPersona(personaModel);
 
-                                    _nombreController.text = '';
-                                    _apellidoController.text = '';
-                                    idGerencia = 'Seleccionar';
-                                    idArea = 'Seleccionar';
-                                    idNivelU = 'Seleccionar';
+                                              provider.setValor(false);
 
-                                    registroCorrecto();
-                                  } else {
-                                    print(
-                                        'debe Seleccionar un nivel de Usuario ');
-                                  }
-                                } else {
-                                  print('debe Seleccionar un área ');
-                                }
-                              } else {
-                                print('debe Seleccionar una gerencia ');
-                              }
-                            }
+                                              if (res == 1) {
+                                                registroCorrecto(
+                                                    'Registro completo');
 
-                            /* final personaDatabase = PersonDatabase();
+                                                final personBloc =
+                                                    ProviderBloc.person(
+                                                        context);
+                                                personBloc.obtenerPersonas();
+                                              } else if (res == 2) {
+                                                registroCorrecto(
+                                                    'Registro fallido');
+                                              } else if (res == 3) {
+                                                registroCorrecto(
+                                                    'Persona con Dni ya existe');
+                                              } else if (res == 8) {
+                                                registroCorrecto(
+                                                    'el dni no tiene 8 Carácteres');
+                                              }
 
-                                PersonModel personaModel = PersonModel();
+                                              _nombreController.text = '';
+                                              _apellidoController.text = '';
+                                              dropdownGerencia = 'Seleccionar';
+                                              dropdownArea = 'Seleccionar';
+                                              dropdownNivelU = 'Seleccionar';
+                                            } else {
+                                              print(
+                                                  'debe Seleccionar un nivel de Usuario ');
+                                            }
+                                          } else {
+                                            print('debe Seleccionar un área ');
+                                          }
+                                        } else {
+                                          print(
+                                              'debe Seleccionar una gerencia ');
+                                        }
+                                      }
 
-                                await personaDatabase.insertarPersona(personaModel); */
-                          },
-                        )
+                                      /* final personaDatabase = PersonDatabase();
+
+                                        PersonModel personaModel = PersonModel();
+
+                                        await personaDatabase.insertarPersona(personaModel); */
+                                    },
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                height: responsive.hp(8),
+                              )
+                            ],
+                          ),
+                        ),
                       ],
                     ),
-                    SizedBox(
-                      height: responsive.hp(8),
-                    )
-                  ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ),
-      ),
+                (data)
+                    ? Container(
+                        height: double.infinity,
+                        width: double.infinity,
+                        color: Colors.black.withOpacity(.5),
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    : Container()
+              ],
+            );
+          }),
     );
   }
 
+//nivel de usuario
   Widget _seleNivelUsuario(BuildContext context, Responsive responsive) {
     final nivelusuarioBloc = ProviderBloc.nivelU(context);
     nivelusuarioBloc.obtenerNivelesDeUsuario();
@@ -554,13 +629,11 @@ class _EditarPersonaState extends State<EditarPersona> {
           idNivelU = list[i].idNivel.toString();
         }
       }
-
-      final areaBloc = ProviderBloc.area(context);
-      areaBloc.obtenerAreasPorIdGerencia(idNivelU.toString());
     }
     print('idEquipo $idNivelU');
   }
 
+//Gerencia
   Widget _selecGerencia(BuildContext context, Responsive responsive) {
     final gerenciaBloc = ProviderBloc.of(context);
     gerenciaBloc.obtenerGerencias();
@@ -678,10 +751,12 @@ class _EditarPersonaState extends State<EditarPersona> {
 
       final areaBloc = ProviderBloc.area(context);
       areaBloc.obtenerAreasPorIdGerencia(idGerencia.toString());
+      cantItemsArea = true;
     }
-    print('idEquipo $idGerencia');
+    print('idGerencia $idGerencia');
   }
 
+//Area
   Widget _selectArea(BuildContext context, Responsive responsive) {
     final areaBloc = ProviderBloc.area(context);
     //areaBloc.obtenerAreas();
@@ -690,7 +765,7 @@ class _EditarPersonaState extends State<EditarPersona> {
       builder: (BuildContext context, AsyncSnapshot<List<AreaModel>> snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data.length > 0) {
-            if (cantItemsArea == 0) {
+            if (cantItemsArea) {
               listArea.clear();
 
               listArea.add('Seleccionar');
@@ -699,6 +774,7 @@ class _EditarPersonaState extends State<EditarPersona> {
                 listArea.add(nombreCanchas);
               }
               dropdownArea = "Seleccionar";
+              cantItemsArea = false;
             }
             return _area(responsive, snapshot.data, listArea);
           } else {
@@ -754,7 +830,7 @@ class _EditarPersonaState extends State<EditarPersona> {
             onChanged: (String data) {
               setState(() {
                 dropdownArea = data;
-                cantItemsArea++;
+                //cantItemsArea++;
                 obtenerIdArea(data, areas);
                 //dropdownEquipos(data,equipos);
               });
@@ -797,7 +873,7 @@ class _EditarPersonaState extends State<EditarPersona> {
     print('idEquipo $idArea');
   }
 
-  void registroCorrecto() {
+  void registroCorrecto(String texto) {
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -810,7 +886,7 @@ class _EditarPersonaState extends State<EditarPersona> {
           title: Column(
             children: <Widget>[
               Text(
-                'Registro completo',
+                '$texto',
                 style: TextStyle(
                   fontSize: responsive.ip(2),
                 ),
@@ -820,6 +896,7 @@ class _EditarPersonaState extends State<EditarPersona> {
           actions: <Widget>[
             MaterialButton(
               onPressed: () async {
+                Navigator.pop(context);
                 Navigator.pop(context);
               },
               child: Text('Continuar'),

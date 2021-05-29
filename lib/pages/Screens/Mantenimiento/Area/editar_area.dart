@@ -383,7 +383,7 @@ class _EditarAreaState extends State<EditarArea> {
           title: Column(
             children: <Widget>[
               Text(
-                'Registro completo',
+                '$texto',
                 style: TextStyle(
                   fontSize: responsive.ip(2),
                 ),

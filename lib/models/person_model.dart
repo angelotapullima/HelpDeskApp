@@ -1,4 +1,5 @@
 class PersonModel {
+  String idPerson;
   String dni;
   String nombre;
   String apellido;
@@ -10,6 +11,7 @@ class PersonModel {
   String nombreNivelUsuario;
 
   PersonModel({
+    this.idPerson,
     this.dni,
     this.nombre,
     this.apellido,
@@ -23,6 +25,7 @@ class PersonModel {
 
   factory PersonModel.fromJson(Map<String, dynamic> json) =>
       PersonModel(
+        idPerson: json["idPerson"],
         dni: json["dni"],
         nombre: json["nombre"],
         apellido: json["apellido"],

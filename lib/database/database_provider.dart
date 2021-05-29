@@ -33,7 +33,8 @@ class DatabaseProvider {
       onConfigure: _onConfigure,
       onCreate: (Database db, int version) async {
         await db.execute(' CREATE TABLE Persona('
-            ' dni TEXT PRIMARY KEY,'
+            ' idPerson TEXT PRIMARY KEY,'
+            ' dni TEXT,'
             ' nombre TEXT,'
             ' apellido TEXT,'
             ' idGerencia TEXT,'

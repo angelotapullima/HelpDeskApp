@@ -184,7 +184,7 @@ class _EditarGerenciaState extends State<EditarGerencia> {
           title: Column(
             children: <Widget>[
               Text(
-                'Registro completo',
+              '$texto',
                 style: TextStyle(
                   fontSize: responsive.ip(2),
                 ),
