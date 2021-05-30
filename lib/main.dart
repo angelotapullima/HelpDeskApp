@@ -7,6 +7,7 @@ import 'package:help_desk_app/bloc/blocDrawer/nav_drawer_bloc.dart';
 import 'package:help_desk_app/bloc/blocDrawer/nav_drawer_state.dart';
 import 'package:help_desk_app/bloc/provider_bloc.dart';
 import 'package:help_desk_app/drawer_widget.dart';
+import 'package:help_desk_app/pages/Equipos/equipos_page.dart';
 import 'package:help_desk_app/pages/Mantenimiento/Area/area_page.dart';
 import 'package:help_desk_app/bloc/bloc_cargando.dart';
 import 'package:help_desk_app/pages/Mantenimiento/Gerencia/gerencia_page.dart';
@@ -16,7 +17,7 @@ import 'package:help_desk_app/preferencias/preferencias_usuario.dart';
 import 'package:help_desk_app/utils/responsive.dart';
 import 'package:provider/provider.dart';
 
-import 'pages/Screens/Mantenimiento/NivelUsuario/nivel_usuario_page.dart';
+import 'pages/Mantenimiento/NivelUsuario/nivel_usuario_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -100,7 +101,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 title: _getAppbarTitle(state.selectedItem, responsive),
                 centerTitle: false,
                 brightness: Brightness.light,
-                backgroundColor: Colors.indigo,
               ),
               body: AnimatedSwitcher(
                 switchInCurve: Curves.easeInExpo,
@@ -216,7 +216,27 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         );
       case NavItem.gestion:
-        return 'My Cart';
+         return Row(
+          children: [
+            Icon(Icons.view_comfortable_rounded),
+            SizedBox(
+              width: res.wp(2),
+            ),
+            Text(
+              'Equipos ',
+              style: TextStyle(
+                fontSize: res.ip(2),
+              ),
+            ),
+            Icon(Icons.chevron_right),
+            Text(
+              'Gestión ',
+              style: TextStyle(
+                fontSize: res.ip(2),
+              ),
+            ),
+          ],
+        );
       case NavItem.errores:
         return 'My Cart';
 
@@ -246,12 +266,7 @@ class _MyHomePageState extends State<MyHomePage> {
         return NivelUsuarioPage();
 
       case NavItem.gestion:
-        return Center(
-          child: Text(
-            'Gestion',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-        );
+        return ListarEquipos();
       case NavItem.errores:
         return Center(
           child: Text(

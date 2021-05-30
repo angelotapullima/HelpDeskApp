@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:help_desk_app/bloc/area_bloc.dart';
+import 'package:help_desk_app/bloc/equipos_bloc.dart';
 import 'package:help_desk_app/bloc/gerencia_bloc.dart';
 import 'package:help_desk_app/bloc/nivel_usuario_bloc.dart';
 import 'package:help_desk_app/bloc/persona_bloc.dart';
@@ -14,6 +15,7 @@ class ProviderBloc extends InheritedWidget {
   final nivelUsuarioBloc = NivelUsuarioBloc();
   final personaBloc = PersonaBloc();
   final usuarioBloc = UsuarioBloc();
+  final equiposBloc = EquiposBloc();
 
   factory ProviderBloc({Key key, Widget child}) {
     if (_instancia == null) {
@@ -52,5 +54,10 @@ class ProviderBloc extends InheritedWidget {
   static UsuarioBloc usuario(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
         .usuarioBloc;
+  }
+
+  static EquiposBloc equipos(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
+        .equiposBloc;
   }
 }

@@ -66,6 +66,16 @@ class DatabaseProvider {
             ' idNivel TEXT PRIMARY KEY,'
             ' nombreNivel TEXT'
             ')');
+
+        await db.execute(' CREATE TABLE Equipos('
+            ' idEquipo TEXT PRIMARY KEY,'
+            ' idGerencia TEXT,'
+            ' idArea TEXT,'
+            ' equipoCodigo TEXT,'
+            ' equipoNombre TEXT,'
+            ' equipoIp TEXT,'
+            ' equipoMac TEXT'
+            ')');
       },
     );
   }
