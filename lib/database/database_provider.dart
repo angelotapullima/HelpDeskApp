@@ -76,6 +76,14 @@ class DatabaseProvider {
             ' equipoIp TEXT,'
             ' equipoMac TEXT'
             ')');
+
+
+            //errorTipo=0)?'Normal':'Otros'
+             await db.execute(' CREATE TABLE Error('
+            ' idError TEXT PRIMARY KEY,'
+            ' errorNombre TEXT,'
+            ' errorTipo TEXT'
+            ')');
       },
     );
   }

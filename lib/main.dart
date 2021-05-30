@@ -10,6 +10,7 @@ import 'package:help_desk_app/drawer_widget.dart';
 import 'package:help_desk_app/pages/Equipos/equipos_page.dart';
 import 'package:help_desk_app/pages/Mantenimiento/Area/area_page.dart';
 import 'package:help_desk_app/bloc/bloc_cargando.dart';
+import 'package:help_desk_app/pages/Mantenimiento/Errores/error_page.dart';
 import 'package:help_desk_app/pages/Mantenimiento/Gerencia/gerencia_page.dart';
 import 'package:help_desk_app/pages/Personas/registro_persona.dart';
 import 'package:help_desk_app/pages/Usuarios/listar_usuarios.dart';
@@ -148,11 +149,30 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         );
       case NavItem.errores:
-        return 'Errores';
+        return Row(
+          children: [ 
+            SizedBox(
+              width: res.wp(2),
+            ),
+            Text(
+              'Manteniento ',
+              style: TextStyle(
+                fontSize: res.ip(2),
+              ),
+            ),
+            Icon(Icons.chevron_right),
+            Text(
+              'Errores ',
+              style: TextStyle(
+                fontSize: res.ip(2),
+              ),
+            ),
+          ],
+        );
+      
       case NavItem.gerencia:
         return Row(
-          children: [
-            Icon(Icons.view_comfortable_rounded),
+          children: [ 
             SizedBox(
               width: res.wp(2),
             ),
@@ -173,8 +193,7 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       case NavItem.area:
         return Row(
-          children: [
-            Icon(Icons.view_comfortable_rounded),
+          children: [ 
             SizedBox(
               width: res.wp(2),
             ),
@@ -195,8 +214,7 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       case NavItem.nivelUsuario:
         return Row(
-          children: [
-            Icon(Icons.view_comfortable_rounded),
+          children: [ 
             SizedBox(
               width: res.wp(2),
             ),
@@ -217,8 +235,7 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       case NavItem.gestion:
          return Row(
-          children: [
-            Icon(Icons.view_comfortable_rounded),
+          children: [ 
             SizedBox(
               width: res.wp(2),
             ),
@@ -252,12 +269,7 @@ class _MyHomePageState extends State<MyHomePage> {
       case NavItem.registarUsuarios:
         return RegistroPersona();
       case NavItem.errores:
-        return Center(
-          child: Text(
-            'Errores',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-        );
+        return ErrorPage();
       case NavItem.gerencia:
         return GerenciaPage();
       case NavItem.area:
