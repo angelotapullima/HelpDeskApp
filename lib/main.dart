@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:help_desk_app/api/area_api.dart';
+import 'package:help_desk_app/api/gerencia_api.dart';
+import 'package:help_desk_app/api/nivel_usuario_api.dart';
 import 'package:help_desk_app/bloc/blocDrawer/nav_drawer_bloc.dart';
 import 'package:help_desk_app/bloc/blocDrawer/nav_drawer_state.dart';
 import 'package:help_desk_app/bloc/provider_bloc.dart';
 import 'package:help_desk_app/drawer_widget.dart';
-import 'package:help_desk_app/pages/Screens/Mantenimiento/Area/area_page.dart';
+import 'package:help_desk_app/pages/Mantenimiento/Area/area_page.dart';
 import 'package:help_desk_app/bloc/bloc_cargando.dart';
-import 'package:help_desk_app/pages/Screens/Mantenimiento/Gerencia/gerencia_page.dart';
-import 'package:help_desk_app/pages/Screens/Personas/registro_persona.dart';
-import 'package:help_desk_app/pages/Screens/Usuarios/listar_usuarios.dart';
+import 'package:help_desk_app/pages/Mantenimiento/Gerencia/gerencia_page.dart';
+import 'package:help_desk_app/pages/Personas/registro_persona.dart';
+import 'package:help_desk_app/pages/Usuarios/listar_usuarios.dart';
 import 'package:help_desk_app/preferencias/preferencias_usuario.dart';
 import 'package:help_desk_app/utils/responsive.dart';
-import 'package:help_desk_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 import 'pages/Screens/Mantenimiento/NivelUsuario/nivel_usuario_page.dart';
@@ -61,14 +63,18 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _content;
 
   @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ingresarNivelUsuarios();
-    });
-
+  void initState() { 
     super.initState();
     _bloc = NavDrawerBloc(NavDrawerState(NavItem.listarUsuario));
     _content = _getContentForState(_bloc.state.selectedItem);
+
+    final gerenciaApi =GerenciaApi();
+    final areaApi =AreaApi();
+    final nivelUsuarioApi=NivelUsuarioApi();
+
+    gerenciaApi.listarGerencia();
+    areaApi.listarAreas();
+    nivelUsuarioApi.listarNivelesUsuario();
   }
 
   @override

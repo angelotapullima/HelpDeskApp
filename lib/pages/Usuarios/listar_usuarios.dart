@@ -5,8 +5,8 @@ import 'package:help_desk_app/bloc/bloc_cargando.dart';
 import 'package:help_desk_app/bloc/provider_bloc.dart';
 import 'package:help_desk_app/database/usuario_database.dart';
 import 'package:help_desk_app/models/Usuario_model.dart';
-import 'package:help_desk_app/pages/Screens/Usuarios/editar_usuario.dart';
-import 'package:help_desk_app/pages/Screens/Usuarios/registrar_usuario.dart';
+import 'package:help_desk_app/pages/Usuarios/editar_usuario.dart';
+import 'package:help_desk_app/pages/Usuarios/registrar_usuario.dart';
 import 'package:help_desk_app/utils/responsive.dart';
 import 'package:provider/provider.dart';
 

@@ -1,41 +1,36 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:help_desk_app/api/gerencia_api.dart';
-import 'package:help_desk_app/bloc/provider_bloc.dart';
-import 'package:help_desk_app/database/gerencia_database.dart';
-import 'package:help_desk_app/models/gerencia_model.dart';
+import 'package:help_desk_app/api/nivel_usuario_api.dart';
 import 'package:help_desk_app/bloc/bloc_cargando.dart';
-import 'package:help_desk_app/pages/Screens/Mantenimiento/Gerencia/editar_gerencia.dart';
+import 'package:help_desk_app/bloc/provider_bloc.dart';
+import 'package:help_desk_app/database/nivel_usuario_database.dart';
+import 'package:help_desk_app/models/nivel_usuario_model.dart';
+import 'package:help_desk_app/pages/Mantenimiento/NivelUsuario/editar_nivel_usuario.dart';
 import 'package:help_desk_app/utils/responsive.dart';
 import 'package:provider/provider.dart';
 
-class GerenciaPage extends StatefulWidget {
-  const GerenciaPage({Key key}) : super(key: key);
+class NivelUsuarioPage extends StatelessWidget {
+  const NivelUsuarioPage({Key key}) : super(key: key);
 
-  @override
-  _GerenciaPageState createState() => _GerenciaPageState();
-}
-
-class _GerenciaPageState extends State<GerenciaPage> {
   @override
   Widget build(BuildContext context) {
     final responsive = Responsive.of(context);
 
-    final gerenciaBloc = ProviderBloc.of(context);
-    gerenciaBloc.obtenerGerencias();
+    final nivelUsuarioBloc = ProviderBloc.nivelU(context);
+    nivelUsuarioBloc.obtenerNivelesDeUsuario();
 
     final provider = Provider.of<BlocCargando>(context, listen: false);
+
     return Scaffold(
       body: ValueListenableBuilder(
-        valueListenable: provider.cargando,
-        builder: (BuildContext context, bool data, Widget child) {
-          return Stack(
-            children: [
-              StreamBuilder(
-                  stream: gerenciaBloc.gerenciasStream,
+          valueListenable: provider.cargando,
+          builder: (BuildContext context, bool data, Widget child) {
+            return Stack(
+              children: [
+                StreamBuilder(
+                  stream: nivelUsuarioBloc.nivelUsuarioStream,
                   builder: (BuildContext context,
-                      AsyncSnapshot<List<GerenciaModel>> snapshot) {
+                      AsyncSnapshot<List<NivelUsuarioModel>> snapshot) {
                     if (snapshot.hasData) {
                       if (snapshot.data.length > 0) {
                         return ListView.builder(
@@ -48,14 +43,18 @@ class _GerenciaPageState extends State<GerenciaPage> {
                                 ),
                                 child: Column(
                                   children: [
-                                    RegistroGerencia(responsive: responsive),
+                                    RegistroNivelUsuario(
+                                        responsive: responsive),
                                     Row(
                                       children: [
-                                        Text(
-                                          'Gerencias',
-                                          style: TextStyle(
-                                              fontSize: responsive.ip(2),
-                                              fontWeight: FontWeight.w700),
+                                        Container(
+                                          width: responsive.wp(66),
+                                          child: Text(
+                                            'Nivel de usuario',
+                                            style: TextStyle(
+                                                fontSize: responsive.ip(1.7),
+                                                fontWeight: FontWeight.w700),
+                                          ),
                                         ),
                                         Spacer(),
                                         Text(
@@ -78,14 +77,13 @@ class _GerenciaPageState extends State<GerenciaPage> {
                             return Container(
                               padding: EdgeInsets.symmetric(
                                 horizontal: responsive.wp(3),
-                                vertical: responsive.hp(.5),
                               ),
                               child: Row(
                                 children: [
                                   Container(
-                                    width: responsive.wp(60),
+                                    width: responsive.wp(66),
                                     child: Text(
-                                      '${snapshot.data[index2].nombreGerencia}',
+                                      '${snapshot.data[index2].nombreNivel}',
                                       style: TextStyle(
                                         fontSize: responsive.ip(1.6),
                                       ),
@@ -110,11 +108,10 @@ class _GerenciaPageState extends State<GerenciaPage> {
                                                 pageBuilder: (context,
                                                     animation,
                                                     secondaryAnimation) {
-                                                  return EditarGerencia(
-                                                    nombreGerencia:
-                                                        '${snapshot.data[index2].nombreGerencia}',
-                                                    idGerencia:
-                                                        '${snapshot.data[index2].idGerencia}',
+                                                  return EditarNivelUsuario(
+                                                    nombreNivel: snapshot.data[index2].nombreNivel,
+                                                    idNivel: snapshot.data[index2].idNivel,
+                                                    
                                                   );
                                                   //return DetalleProductitos(productosData: productosData);
                                                 },
@@ -128,30 +125,33 @@ class _GerenciaPageState extends State<GerenciaPage> {
                                                   );
                                                 },
                                               ),
-                                            );
+                                            ); 
                                           },
                                         ),
                                         IconButton(
                                           icon: Icon(Icons.delete),
                                           onPressed: () async {
-                                            final gerenciaApi = GerenciaApi();
+
+                                            final nivelUsuarioApi =NivelUsuarioApi();
+
+                                             
                                             provider.setValor(true);
-                                            final res = await gerenciaApi
-                                                .eliminarGerencia(
-                                                    '${snapshot.data[index2].idGerencia}');
+                                            final res = await nivelUsuarioApi.eliminarNivelUsuario(
+                                                '${snapshot.data[index2].idNivel}');
 
-                                            if (res) {
-                                              final gerenciaDatase =
-                                                  GerenciaDatabase();
 
-                                              await gerenciaDatase
-                                                  .deleteGerenciaporId(
-                                                '${snapshot.data[index2].idGerencia}',
-                                              );
-                                            }
                                             provider.setValor(false);
 
-                                            gerenciaBloc.obtenerGerencias();
+                                            if (res) {
+                                              final nivelUsuarioDatabase =
+                                                  NivelUsuarioDatabase();
+
+                                              await nivelUsuarioDatabase
+                                                  .deleteNivelUsuarioPorId(
+                                                '${snapshot.data[index2].idNivel}',
+                                              );
+                                            }
+                                            nivelUsuarioBloc.obtenerNivelesDeUsuario();
                                           },
                                         ),
                                       ],
@@ -165,7 +165,7 @@ class _GerenciaPageState extends State<GerenciaPage> {
                       } else {
                         return Column(
                           children: [
-                            RegistroGerencia(responsive: responsive),
+                            RegistroNivelUsuario(responsive: responsive),
                             Text('Aún no se registro Gerencias')
                           ],
                         );
@@ -173,50 +173,49 @@ class _GerenciaPageState extends State<GerenciaPage> {
                     } else {
                       return Column(
                         children: [
-                          RegistroGerencia(responsive: responsive),
+                          RegistroNivelUsuario(responsive: responsive),
                           Text('Aún no se registro Gerencias')
                         ],
                       );
                     }
-                  }),
-              (data)
-                  ? Container(
-                      height: double.infinity,
-                      width: double.infinity,
-                      color: Colors.black.withOpacity(.5),
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    )
-                  : Container()
-            ],
-          );
-        },
-      ),
+                  },
+                ),
+                (data)
+                    ? Container(
+                        height: double.infinity,
+                        width: double.infinity,
+                        color: Colors.black.withOpacity(.5),
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    : Container()
+              ],
+            );
+          }),
     );
   }
 }
 
-class RegistroGerencia extends StatefulWidget {
-  const RegistroGerencia({
+class RegistroNivelUsuario extends StatefulWidget {
+  const RegistroNivelUsuario({
     Key key,
     @required this.responsive,
-    this.algo,
   }) : super(key: key);
 
   final Responsive responsive;
-  final ValueListenable algo;
 
   @override
-  _RegistroGerenciaState createState() => _RegistroGerenciaState();
+  _RegistroNivelUsuarioState createState() => _RegistroNivelUsuarioState();
 }
 
-class _RegistroGerenciaState extends State<RegistroGerencia> {
-  TextEditingController _gerenciaController = new TextEditingController();
+class _RegistroNivelUsuarioState extends State<RegistroNivelUsuario> {
+  TextEditingController _nivelUsuarioControllerController =
+      new TextEditingController();
 
   @override
   void dispose() {
-    _gerenciaController.dispose();
+    _nivelUsuarioControllerController.dispose();
 
     super.dispose();
   }
@@ -228,17 +227,25 @@ class _RegistroGerenciaState extends State<RegistroGerencia> {
     return Container(
       margin: EdgeInsets.symmetric(
         vertical: widget.responsive.hp(2),
+        horizontal: widget.responsive.wp(3),
       ),
       width: double.infinity,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.black45),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Registro de Gerencias',
-            style: TextStyle(
-                fontSize: widget.responsive.ip(2), fontWeight: FontWeight.w700),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Registro de Nivel de usuario',
+                style: TextStyle(
+                    fontSize: widget.responsive.ip(2),
+                    fontWeight: FontWeight.w700),
+              ),
+            ],
           ),
           Divider(
             color: Colors.black,
@@ -247,75 +254,99 @@ class _RegistroGerenciaState extends State<RegistroGerencia> {
           SizedBox(
             height: widget.responsive.hp(1),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Gerencia :',
-                style: TextStyle(
-                    fontSize: widget.responsive.ip(1.6),
-                    fontWeight: FontWeight.w600),
-              ),
-              SizedBox(
-                width: widget.responsive.wp(5),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: widget.responsive.wp(2),
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: widget.responsive.wp(5),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  'Nivel :',
+                  style: TextStyle(
+                      fontSize: widget.responsive.ip(1.6),
+                      fontWeight: FontWeight.w600),
                 ),
-                width: widget.responsive.wp(60),
-                color: Colors.grey[200],
-                height: widget.responsive.hp(5),
-                child: TextField(
-                  cursorColor: Colors.transparent,
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(
-                        color: Colors.black45,
-                        fontSize: widget.responsive.ip(1.7),
-                      ),
-                      hintText: 'Nombre Gerencia'),
-                  enableInteractiveSelection: false,
-                  controller: _gerenciaController,
+                SizedBox(
+                  width: widget.responsive.wp(5),
                 ),
-              )
-            ],
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: widget.responsive.wp(2),
+                    ),
+                    color: Colors.grey[200],
+                    height: widget.responsive.hp(4),
+                    child: TextField(
+                      cursorColor: Colors.transparent,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintStyle: TextStyle(
+                            color: Colors.black45,
+                            fontSize: widget.responsive.ip(1.7),
+                          ),
+                          hintText: 'Nivel'),
+                      enableInteractiveSelection: false,
+                      controller: _nivelUsuarioControllerController,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          SizedBox(
+            height: widget.responsive.hp(2),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: widget.responsive.wp(5),
+            ),
+            child: Row(
+              children: [
+                Spacer(),
+                MaterialButton(
+                  color: Colors.blue,
+                  onPressed: () async {
+                    if (_nivelUsuarioControllerController.text.length > 0) {
+                      final nivelUsuarioApi = NivelUsuarioApi();
+
+                      provider.setValor(true);
+
+                      final res = await nivelUsuarioApi.guardarNivelUsuario(
+                          _nivelUsuarioControllerController.text);
+                      provider.setValor(false);
+
+                      if (res) {
+                        registroCorrecto('Registro completo');
+                      } else {
+                        registroCorrecto('Registro fallido');
+                      }
+
+                      final nivelUsuarioBloc = ProviderBloc.nivelU(context);
+
+                      _nivelUsuarioControllerController.text = '';
+
+                      nivelUsuarioBloc.obtenerNivelesDeUsuario();
+
+                      print('area ok');
+                    } else {
+                      print('debe registar un nombre para el área');
+                    }
+                  },
+                  child: Text(
+                    'Registrar',
+                    style: TextStyle(
+                        fontSize: widget.responsive.ip(1.5),
+                        color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
           ),
           SizedBox(
             height: widget.responsive.hp(1),
           ),
-          MaterialButton(
-            color: Colors.blue,
-            onPressed: () async {
-              if (_gerenciaController.text.length > 0) {
-                final gerenciaApi = GerenciaApi();
-                final gerenciaBloc = ProviderBloc.of(context);
-                provider.setValor(true);
-                final res =
-                    await gerenciaApi.guardarGerencia(_gerenciaController.text);
-
-                provider.setValor(false);
-
-                if (res) {
-                  registroCorrecto('Registro completo');
-                } else {
-                  registroCorrecto('Registro fallido');
-                }
-
-                _gerenciaController.text = '';
-
-                gerenciaBloc.obtenerGerencias();
-              } else {
-                print('debe registar un nombre para la gerencia');
-              }
-            },
-            child: Text(
-              'Registrar',
-              style: TextStyle(
-                  fontSize: widget.responsive.ip(1.5), color: Colors.white),
-            ),
-          )
         ],
       ),
     );
@@ -334,7 +365,7 @@ class _RegistroGerenciaState extends State<RegistroGerencia> {
           title: Column(
             children: <Widget>[
               Text(
-               '$texto',
+                '$texto',
                 style: TextStyle(
                   fontSize: responsive.ip(2),
                 ),

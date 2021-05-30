@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:help_desk_app/api/nivel_usuario_api.dart';
+import 'package:help_desk_app/api/area_api.dart';
 import 'package:help_desk_app/bloc/bloc_cargando.dart';
 import 'package:help_desk_app/bloc/provider_bloc.dart';
-import 'package:help_desk_app/database/nivel_usuario_database.dart';
-import 'package:help_desk_app/models/nivel_usuario_model.dart';
-import 'package:help_desk_app/pages/Screens/Mantenimiento/NivelUsuario/editar_nivel_usuario.dart';
+import 'package:help_desk_app/database/area_database.dart';
+import 'package:help_desk_app/models/area_model.dart';
+import 'package:help_desk_app/models/gerencia_model.dart';
+import 'package:help_desk_app/pages/Mantenimiento/Area/editar_area.dart';
 import 'package:help_desk_app/utils/responsive.dart';
 import 'package:provider/provider.dart';
 
-class NivelUsuarioPage extends StatelessWidget {
-  const NivelUsuarioPage({Key key}) : super(key: key);
+class AreaPage extends StatelessWidget {
+  const AreaPage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final responsive = Responsive.of(context);
 
-    final nivelUsuarioBloc = ProviderBloc.nivelU(context);
-    nivelUsuarioBloc.obtenerNivelesDeUsuario();
+    final areaBloc = ProviderBloc.area(context);
+    areaBloc.obtenerAreas();
 
     final provider = Provider.of<BlocCargando>(context, listen: false);
 
@@ -28,9 +29,9 @@ class NivelUsuarioPage extends StatelessWidget {
             return Stack(
               children: [
                 StreamBuilder(
-                  stream: nivelUsuarioBloc.nivelUsuarioStream,
+                  stream: areaBloc.areasStream,
                   builder: (BuildContext context,
-                      AsyncSnapshot<List<NivelUsuarioModel>> snapshot) {
+                      AsyncSnapshot<List<AreaModel>> snapshot) {
                     if (snapshot.hasData) {
                       if (snapshot.data.length > 0) {
                         return ListView.builder(
@@ -43,14 +44,22 @@ class NivelUsuarioPage extends StatelessWidget {
                                 ),
                                 child: Column(
                                   children: [
-                                    RegistroNivelUsuario(
-                                        responsive: responsive),
+                                    RegistroGerencia(responsive: responsive),
                                     Row(
                                       children: [
                                         Container(
-                                          width: responsive.wp(66),
+                                          width: responsive.wp(33),
                                           child: Text(
-                                            'Nivel de usuario',
+                                            'Areas',
+                                            style: TextStyle(
+                                                fontSize: responsive.ip(1.7),
+                                                fontWeight: FontWeight.w700),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: responsive.wp(33),
+                                          child: Text(
+                                            'Gerencias',
                                             style: TextStyle(
                                                 fontSize: responsive.ip(1.7),
                                                 fontWeight: FontWeight.w700),
@@ -81,9 +90,19 @@ class NivelUsuarioPage extends StatelessWidget {
                               child: Row(
                                 children: [
                                   Container(
-                                    width: responsive.wp(66),
+                                    width: responsive.wp(33),
                                     child: Text(
-                                      '${snapshot.data[index2].nombreNivel}',
+                                      '${snapshot.data[index2].nombreArea}',
+                                      style: TextStyle(
+                                        fontSize: responsive.ip(1.6),
+                                      ),
+                                    ),
+                                  ),
+                                  Spacer(),
+                                  Container(
+                                    width: responsive.wp(33),
+                                    child: Text(
+                                      '${snapshot.data[index2].nombreGerencia}',
                                       style: TextStyle(
                                         fontSize: responsive.ip(1.6),
                                       ),
@@ -108,10 +127,8 @@ class NivelUsuarioPage extends StatelessWidget {
                                                 pageBuilder: (context,
                                                     animation,
                                                     secondaryAnimation) {
-                                                  return EditarNivelUsuario(
-                                                    nombreNivel: snapshot.data[index2].nombreNivel,
-                                                    idNivel: snapshot.data[index2].idNivel,
-                                                    
+                                                  return EditarArea(
+                                                    area: snapshot.data[index2],
                                                   );
                                                   //return DetalleProductitos(productosData: productosData);
                                                 },
@@ -125,33 +142,29 @@ class NivelUsuarioPage extends StatelessWidget {
                                                   );
                                                 },
                                               ),
-                                            ); 
+                                            );
                                           },
                                         ),
                                         IconButton(
                                           icon: Icon(Icons.delete),
                                           onPressed: () async {
-
-                                            final nivelUsuarioApi =NivelUsuarioApi();
-
-                                             
+                                            final areaApi = AreaApi();
                                             provider.setValor(true);
-                                            final res = await nivelUsuarioApi.eliminarNivelUsuario(
-                                                '${snapshot.data[index2].idNivel}');
+                                            final res = await areaApi.eliminarArea(
+                                                '${snapshot.data[index2].idArea}');
+                                            if (res) {
+                                              final areaDatabase =
+                                                  AreaDatabase();
 
+                                              await areaDatabase
+                                                  .deleteAreaPorId(
+                                                '${snapshot.data[index2].idArea}',
+                                              );
+                                            }
 
                                             provider.setValor(false);
 
-                                            if (res) {
-                                              final nivelUsuarioDatabase =
-                                                  NivelUsuarioDatabase();
-
-                                              await nivelUsuarioDatabase
-                                                  .deleteNivelUsuarioPorId(
-                                                '${snapshot.data[index2].idNivel}',
-                                              );
-                                            }
-                                            nivelUsuarioBloc.obtenerNivelesDeUsuario();
+                                            areaBloc.obtenerAreas();
                                           },
                                         ),
                                       ],
@@ -165,7 +178,7 @@ class NivelUsuarioPage extends StatelessWidget {
                       } else {
                         return Column(
                           children: [
-                            RegistroNivelUsuario(responsive: responsive),
+                            RegistroGerencia(responsive: responsive),
                             Text('Aún no se registro Gerencias')
                           ],
                         );
@@ -173,7 +186,7 @@ class NivelUsuarioPage extends StatelessWidget {
                     } else {
                       return Column(
                         children: [
-                          RegistroNivelUsuario(responsive: responsive),
+                          RegistroGerencia(responsive: responsive),
                           Text('Aún no se registro Gerencias')
                         ],
                       );
@@ -197,8 +210,8 @@ class NivelUsuarioPage extends StatelessWidget {
   }
 }
 
-class RegistroNivelUsuario extends StatefulWidget {
-  const RegistroNivelUsuario({
+class RegistroGerencia extends StatefulWidget {
+  const RegistroGerencia({
     Key key,
     @required this.responsive,
   }) : super(key: key);
@@ -206,16 +219,19 @@ class RegistroNivelUsuario extends StatefulWidget {
   final Responsive responsive;
 
   @override
-  _RegistroNivelUsuarioState createState() => _RegistroNivelUsuarioState();
+  _RegistroGerenciaState createState() => _RegistroGerenciaState();
 }
 
-class _RegistroNivelUsuarioState extends State<RegistroNivelUsuario> {
-  TextEditingController _nivelUsuarioControllerController =
-      new TextEditingController();
+class _RegistroGerenciaState extends State<RegistroGerencia> {
+  TextEditingController _areaController = new TextEditingController();
 
+  String dropdownGerencia = '';
+  List<String> list = [];
+  int cantItemsGerencia = 0;
+  String idGerencia = 'Seleccionar';
   @override
   void dispose() {
-    _nivelUsuarioControllerController.dispose();
+    _areaController.dispose();
 
     super.dispose();
   }
@@ -240,7 +256,7 @@ class _RegistroNivelUsuarioState extends State<RegistroNivelUsuario> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Registro de Nivel de usuario',
+                'Registro de Areas',
                 style: TextStyle(
                     fontSize: widget.responsive.ip(2),
                     fontWeight: FontWeight.w700),
@@ -262,7 +278,7 @@ class _RegistroNivelUsuarioState extends State<RegistroNivelUsuario> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  'Nivel :',
+                  'Area :',
                   style: TextStyle(
                       fontSize: widget.responsive.ip(1.6),
                       fontWeight: FontWeight.w600),
@@ -286,9 +302,9 @@ class _RegistroNivelUsuarioState extends State<RegistroNivelUsuario> {
                             color: Colors.black45,
                             fontSize: widget.responsive.ip(1.7),
                           ),
-                          hintText: 'Nivel'),
+                          hintText: 'Nombre Area'),
                       enableInteractiveSelection: false,
-                      controller: _nivelUsuarioControllerController,
+                      controller: _areaController,
                     ),
                   ),
                 )
@@ -302,34 +318,62 @@ class _RegistroNivelUsuarioState extends State<RegistroNivelUsuario> {
             padding: EdgeInsets.symmetric(
               horizontal: widget.responsive.wp(5),
             ),
+            child: Text(
+              'Seleccionar Gerencia',
+              style: TextStyle(
+                  fontSize: widget.responsive.ip(1.6),
+                  fontWeight: FontWeight.w600),
+            ),
+          ),
+          SizedBox(
+            height: widget.responsive.hp(1),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: widget.responsive.wp(5),
+            ),
+            child: _selecGerencia(context, widget.responsive),
+          ),
+          SizedBox(
+            height: widget.responsive.hp(1),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: widget.responsive.wp(5),
+            ),
             child: Row(
               children: [
                 Spacer(),
                 MaterialButton(
                   color: Colors.blue,
                   onPressed: () async {
-                    if (_nivelUsuarioControllerController.text.length > 0) {
-                      final nivelUsuarioApi = NivelUsuarioApi();
-
-                      provider.setValor(true);
-
-                      final res = await nivelUsuarioApi.guardarNivelUsuario(
-                          _nivelUsuarioControllerController.text);
-                      provider.setValor(false);
-
-                      if (res) {
-                        registroCorrecto('Registro completo');
+                    if (_areaController.text.length > 0) {
+                      if (idGerencia == 'Seleccionar') {
+                        print('se debe asignar una gerencia');
                       } else {
-                        registroCorrecto('Registro fallido');
+                        final areaApi = AreaApi();
+
+                        provider.setValor(true);
+
+                        final res = await areaApi.guardarArea(
+                            _areaController.text, idGerencia);
+                        provider.setValor(false);
+
+                        if (res) {
+                          registroCorrecto('Registro completo');
+                        } else {
+                          registroCorrecto('Registro fallido');
+                        }
+
+                        final areaBloc = ProviderBloc.area(context);
+
+                        _areaController.text = '';
+
+                        areaBloc.obtenerAreas();
                       }
 
-                      final nivelUsuarioBloc = ProviderBloc.nivelU(context);
-
-                      _nivelUsuarioControllerController.text = '';
-
-                      nivelUsuarioBloc.obtenerNivelesDeUsuario();
-
                       print('area ok');
+                      /*  */
                     } else {
                       print('debe registar un nombre para el área');
                     }
@@ -343,13 +387,120 @@ class _RegistroNivelUsuarioState extends State<RegistroNivelUsuario> {
                 ),
               ],
             ),
-          ),
-          SizedBox(
-            height: widget.responsive.hp(1),
-          ),
+          )
         ],
       ),
     );
+  }
+
+  Widget _selecGerencia(BuildContext context, Responsive responsive) {
+    final gerenciaBloc = ProviderBloc.of(context);
+    gerenciaBloc.obtenerGerencias();
+    return StreamBuilder(
+      stream: gerenciaBloc.gerenciasStream,
+      builder:
+          (BuildContext context, AsyncSnapshot<List<GerenciaModel>> snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data.length > 0) {
+            if (cantItemsGerencia == 0) {
+              list.clear();
+
+              list.add('Seleccionar');
+              for (int i = 0; i < snapshot.data.length; i++) {
+                String nombreCanchas = snapshot.data[i].nombreGerencia;
+                list.add(nombreCanchas);
+              }
+              dropdownGerencia = "Seleccionar";
+            }
+            return _gerencia(responsive, snapshot.data, list);
+          } else {
+            return Container(
+              child: Text('mare'),
+            );
+          }
+        } else {
+          return Container(
+            child: Text('mare2'),
+          );
+        }
+      },
+    );
+  }
+
+  Widget _gerencia(
+      Responsive responsive, List<GerenciaModel> equipos, List<String> equipe) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: responsive.wp(0),
+          ),
+          width: double.infinity,
+          height: responsive.hp(4),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(
+              Radius.circular(5),
+            ),
+            border: Border.all(color: Colors.black26),
+          ),
+          child: DropdownButton<String>(
+            dropdownColor: Colors.white,
+            value: dropdownGerencia,
+            isExpanded: true,
+            icon: Icon(Icons.arrow_drop_down),
+            iconSize: 24,
+            elevation: 16,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: responsive.ip(1.5),
+            ),
+            underline: Container(),
+            onChanged: (String data) {
+              setState(() {
+                dropdownGerencia = data;
+                cantItemsGerencia++;
+                obtenerIdEquipo(data, equipos);
+                //dropdownEquipos(data,equipos);
+              });
+            },
+            items: equipe.map(
+              (e) {
+                return DropdownMenuItem<String>(
+                  value: e,
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      e,
+                      maxLines: 3,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: responsive.ip(1.5),
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                );
+              },
+            ).toList(),
+          ),
+        ),
+      ],
+    );
+  }
+
+  void obtenerIdEquipo(String dato, List<GerenciaModel> list) {
+    if (dato == 'Seleccionar') {
+      idGerencia = 'Seleccionar';
+    } else {
+      for (int i = 0; i < list.length; i++) {
+        if (dato == list[i].nombreGerencia) {
+          idGerencia = list[i].idGerencia.toString();
+        }
+      }
+    }
+    print('idEquipo $idGerencia');
   }
 
   void registroCorrecto(String texto) {
