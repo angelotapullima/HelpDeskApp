@@ -7,6 +7,7 @@ import 'package:help_desk_app/bloc/blocDrawer/nav_drawer_bloc.dart';
 import 'package:help_desk_app/bloc/blocDrawer/nav_drawer_state.dart';
 import 'package:help_desk_app/bloc/provider_bloc.dart';
 import 'package:help_desk_app/drawer_widget.dart';
+import 'package:help_desk_app/pages/Atenciones/atenciones_page.dart';
 import 'package:help_desk_app/pages/Equipos/equipos_page.dart';
 import 'package:help_desk_app/pages/Mantenimiento/Area/area_page.dart';
 import 'package:help_desk_app/bloc/bloc_cargando.dart';
@@ -14,6 +15,7 @@ import 'package:help_desk_app/pages/Mantenimiento/Errores/error_page.dart';
 import 'package:help_desk_app/pages/Mantenimiento/Gerencia/gerencia_page.dart';
 import 'package:help_desk_app/pages/Personas/registro_persona.dart';
 import 'package:help_desk_app/pages/Usuarios/listar_usuarios.dart';
+import 'package:help_desk_app/pages/soporte/errores_equipos.dart';
 import 'package:help_desk_app/preferencias/preferencias_usuario.dart';
 import 'package:help_desk_app/utils/responsive.dart';
 import 'package:provider/provider.dart';
@@ -254,8 +256,47 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ],
         );
-      case NavItem.errores:
-        return 'My Cart';
+      case NavItem.errorEquipos:
+          return Row(
+          children: [ 
+            SizedBox(
+              width: res.wp(2),
+            ),
+            Text(
+              'Soporte ',
+              style: TextStyle(
+                fontSize: res.ip(2),
+              ),
+            ),
+            Icon(Icons.chevron_right),
+            Text(
+              'Equipos ',
+              style: TextStyle(
+                fontSize: res.ip(2),
+              ),
+            ),
+          ],
+        );case NavItem.atenciones:
+          return Row(
+          children: [ 
+            SizedBox(
+              width: res.wp(2),
+            ),
+            Text(
+              'Atenciones ',
+              style: TextStyle(
+                fontSize: res.ip(2),
+              ),
+            ),
+            Icon(Icons.chevron_right),
+            Text(
+              'Home ',
+              style: TextStyle(
+                fontSize: res.ip(2),
+              ),
+            ),
+          ],
+        );
 
       default:
         return '';
@@ -279,13 +320,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
       case NavItem.gestion:
         return ListarEquipos();
-      case NavItem.errores:
-        return Center(
-          child: Text(
-            'Errores',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-        );
+      case NavItem.errorEquipos:
+        return ErroresEquipos();
+        case NavItem.atenciones:
+        return AtencionesPage();
       default:
         return Center(
           child: Text(

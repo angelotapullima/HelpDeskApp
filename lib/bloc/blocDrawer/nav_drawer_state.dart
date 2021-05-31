@@ -12,5 +12,6 @@ enum NavItem {
   area,
   nivelUsuario,
   gestion,
-  reportes,
+  errorEquipos,
+  atenciones,
 }

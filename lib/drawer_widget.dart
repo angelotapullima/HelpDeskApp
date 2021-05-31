@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:help_desk_app/bloc/blocDrawer/drawer_event.dart';
 import 'package:help_desk_app/bloc/blocDrawer/nav_drawer_bloc.dart';
-import 'package:help_desk_app/bloc/blocDrawer/nav_drawer_state.dart'; 
+import 'package:help_desk_app/bloc/blocDrawer/nav_drawer_state.dart';
 import 'package:help_desk_app/utils/responsive.dart';
 
 class NavDrawerWidget extends StatelessWidget {
@@ -25,7 +25,8 @@ class NavDrawerWidget extends StatelessWidget {
           _NavigationItem(false, NavItem.errores, "Errores", Icons.home),
           _NavigationItem(false, NavItem.gerencia, "Gerencia", Icons.person),
           _NavigationItem(false, NavItem.area, "Area", Icons.person),
-          _NavigationItem(false, NavItem.nivelUsuario, "Nivel de Usuario", Icons.person),
+          _NavigationItem(
+              false, NavItem.nivelUsuario, "Nivel de Usuario", Icons.person),
         ],
         nombre: 'Mantenimiento'),
     _NavHeader(
@@ -37,7 +38,15 @@ class NavDrawerWidget extends StatelessWidget {
     _NavHeader(
         header: false,
         listItem: [
-          _NavigationItem(false, NavItem.reportes, "Reportes", Icons.home),
+          _NavigationItem(false, NavItem.errorEquipos, "reportar error equipos",
+              Icons.home),
+        ],
+        nombre: 'Soporte'),
+    _NavHeader(
+        header: false,
+        listItem: [
+          _NavigationItem(false, NavItem.atenciones, "Atenciones",
+              Icons.home),
         ],
         nombre: 'Reportes'),
   ];
@@ -131,7 +140,9 @@ class NavDrawerWidget extends StatelessWidget {
       Container(
         padding: EdgeInsets.only(left: res.wp(7)),
         child: Card(
-          color: data.item == state.selectedItem?Colors.blue.withOpacity(.6):Colors.white,
+          color: data.item == state.selectedItem
+              ? Colors.blue.withOpacity(.6)
+              : Colors.white,
           shape: ContinuousRectangleBorder(borderRadius: BorderRadius.zero),
           borderOnForeground: true,
           elevation: 0,

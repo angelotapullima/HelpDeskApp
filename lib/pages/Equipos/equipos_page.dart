@@ -58,25 +58,26 @@ class ListarEquipos extends StatelessWidget {
                               children: [
                                 Row(
                                   children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          '${snapshot.data[index2].equipoNombre}',
-                                          style: TextStyle(
-                                              fontSize: responsive.ip(1.5),
-                                              fontWeight: FontWeight.w700),
-                                        ),
-                                        Text(
-                                          '${snapshot.data[index2].nombreGerencia} > ${snapshot.data[index2].nombreArea}',
-                                          style: TextStyle(
-                                              fontSize: responsive.ip(1.5),
-                                              fontWeight: FontWeight.w700),
-                                        ),
-                                      ],
-                                    ),
-                                    Spacer(),
+                                    Expanded(
+                                                                          child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '${snapshot.data[index2].equipoNombre}',
+                                            style: TextStyle(
+                                                fontSize: responsive.ip(1.5),
+                                                fontWeight: FontWeight.w700),
+                                          ),
+                                          Text(
+                                            '${snapshot.data[index2].nombreGerencia} > ${snapshot.data[index2].nombreArea}',
+                                            style: TextStyle(
+                                                fontSize: responsive.ip(1.5),
+                                                fontWeight: FontWeight.w700),
+                                          ),
+                                        ],
+                                      ),
+                                    ), SizedBox(width: responsive.wp(2),),
                                     Container(
                                       width: responsive.wp(23),
                                       child: Row(

@@ -29,6 +29,17 @@ class EquiposDatabase {
 
     return list;
   }
+
+
+  Future<List<EquiposModel>> obtenerEquiposPorArea(String idArea) async {
+    final db = await dbprovider.database;
+    final res = await db.rawQuery("SELECT * FROM Equipos where idArea='$idArea'");
+
+    List<EquiposModel> list =
+        res.isNotEmpty ? res.map((c) => EquiposModel.fromJson(c)).toList() : [];
+
+    return list;
+  }
 /* 
   Future<List<EquiposModel>> obtenerAreaPorIdGerencia(String id) async {
     final db = await dbprovider.database;
