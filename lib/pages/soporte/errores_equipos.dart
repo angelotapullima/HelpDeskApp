@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:help_desk_app/bloc/provider_bloc.dart';
 import 'package:help_desk_app/models/gerencia_model.dart';
+import 'package:help_desk_app/pages/soporte/registro_fallas.dart';
 import 'package:help_desk_app/utils/responsive.dart';
 
 class ErroresEquipos extends StatelessWidget {
@@ -28,9 +29,8 @@ class ErroresEquipos extends StatelessWidget {
                   if (indexcito == 0) {
                     return Padding(
                       padding: EdgeInsets.symmetric(
-                        horizontal: responsive.wp(2),
-                        vertical: responsive.hp(2)
-                      ),
+                          horizontal: responsive.wp(2),
+                          vertical: responsive.hp(2)),
                       child: Text(
                         'Equipos De Area 7 \nseleccione un equipo para reportar un error',
                         style: TextStyle(
@@ -131,7 +131,30 @@ class ErroresEquipos extends StatelessWidget {
                                             fontSize: responsive.ip(1.4),
                                           ),
                                         ),
-                                        onPressed: () {})
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            PageRouteBuilder(
+                                              transitionDuration:
+                                                  const Duration(
+                                                      milliseconds: 400),
+                                              pageBuilder: (context, animation,
+                                                  secondaryAnimation) {
+                                                return ReporteFallas(equiposModel: snapshot.data[index].areas[index3].equipos[index5],);
+                                                //return DetalleProductitos(productosData: productosData);
+                                              },
+                                              transitionsBuilder: (context,
+                                                  animation,
+                                                  secondaryAnimation,
+                                                  child) {
+                                                return FadeTransition(
+                                                  opacity: animation,
+                                                  child: child,
+                                                );
+                                              },
+                                            ),
+                                          );
+                                        })
                                   ],
                                 ),
                                 SizedBox(

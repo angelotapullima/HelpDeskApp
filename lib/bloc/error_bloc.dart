@@ -10,18 +10,31 @@ class ErrorBloc {
   final errorDatabase = ErrorDatabase();
   final errorApi = ErrorApi();
 
-  final _errorController = BehaviorSubject<List<ErrorModel>>();
+  final _errorTipo1Controller = BehaviorSubject<List<ErrorModel>>();
+  final _errorTipo2Controller = BehaviorSubject<List<ErrorModel>>();
 
-  Stream<List<ErrorModel>> get errorStream =>
-      _errorController.stream;
+  Stream<List<ErrorModel>> get errorTipo1Stream =>_errorTipo1Controller.stream;
+  Stream<List<ErrorModel>> get errorTipo2Stream =>_errorTipo2Controller.stream;
 
   dispose() {
-    _errorController?.close();
+    _errorTipo1Controller?.close();
+    _errorTipo2Controller?.close();
   }
 
-  void obtenerErrores() async {
-    _errorController.sink.add(await errorDatabase.obtenerErrores());
+  void obtenerErroresPorTipo1( ) async {
+    _errorTipo1Controller.sink.add(await errorDatabase.obtenerErroresPorTipo('1'));
     await errorApi.listarErrores();
-    _errorController.sink.add(await errorDatabase.obtenerErrores());
+    _errorTipo1Controller.sink.add(await errorDatabase.obtenerErroresPorTipo('1'));
+  }
+
+
+  void obtenerErroresPorTipo2( ) async {
+    _errorTipo2Controller.sink.add(await errorDatabase.obtenerErroresPorTipo('2'));
+    await errorApi.listarErrores();
+    _errorTipo2Controller.sink.add(await errorDatabase.obtenerErroresPorTipo('2'));
+  }
+
+  void obtenerErrores() async { 
+    await errorApi.listarErrores(); 
   }
 }

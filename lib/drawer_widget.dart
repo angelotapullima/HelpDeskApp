@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:help_desk_app/bloc/blocDrawer/drawer_event.dart';
 import 'package:help_desk_app/bloc/blocDrawer/nav_drawer_bloc.dart';
 import 'package:help_desk_app/bloc/blocDrawer/nav_drawer_state.dart';
+import 'package:help_desk_app/preferencias/preferencias_usuario.dart';
 import 'package:help_desk_app/utils/responsive.dart';
 
 class NavDrawerWidget extends StatelessWidget {
@@ -10,43 +12,50 @@ class NavDrawerWidget extends StatelessWidget {
   final String accountEmail;
 
   final listGeneral = [
-    _NavHeader(header: true, listItem: [], nombre: ''),
+    _NavHeader(tipo: 1, listItem: [], nombre: ''),
     _NavHeader(
-        header: false,
+        tipo: 2,
         listItem: [
-          _NavigationItem(false, NavItem.listarUsuario, "Listar", Icons.home),
+          _NavigationItem(false, NavItem.listarUsuario, "Listar",  FontAwesomeIcons.accusoft),
           _NavigationItem(
-              false, NavItem.registarUsuarios, "reggistrar", Icons.person),
+              false, NavItem.registarUsuarios, "reggistrar",  FontAwesomeIcons.accusoft),
         ],
         nombre: 'Usuarios'),
     _NavHeader(
-        header: false,
+        tipo: 2,
         listItem: [
-          _NavigationItem(false, NavItem.errores, "Errores", Icons.home),
-          _NavigationItem(false, NavItem.gerencia, "Gerencia", Icons.person),
-          _NavigationItem(false, NavItem.area, "Area", Icons.person),
+          _NavigationItem(false, NavItem.errores, "Errores",  FontAwesomeIcons.accusoft),
+          _NavigationItem(false, NavItem.gerencia, "Gerencia", FontAwesomeIcons.accusoft),
+          _NavigationItem(false, NavItem.area, "Area",  FontAwesomeIcons.accusoft),
           _NavigationItem(
-              false, NavItem.nivelUsuario, "Nivel de Usuario", Icons.person),
+              false, NavItem.nivelUsuario, "Nivel de Usuario",  FontAwesomeIcons.accusoft),
         ],
         nombre: 'Mantenimiento'),
     _NavHeader(
-        header: false,
+        tipo: 2,
         listItem: [
-          _NavigationItem(false, NavItem.gestion, "Gestion", Icons.home),
+          _NavigationItem(false, NavItem.gestion, "Gestión", FontAwesomeIcons.accusoft,),
         ],
         nombre: 'Equipos'),
     _NavHeader(
-        header: false,
+        tipo: 2,
         listItem: [
           _NavigationItem(false, NavItem.errorEquipos, "reportar error equipos",
-              Icons.home),
+              FontAwesomeIcons.accusoft),
         ],
         nombre: 'Soporte'),
     _NavHeader(
-        header: false,
+        tipo: 2,
         listItem: [
-          _NavigationItem(false, NavItem.atenciones, "Atenciones",
-              Icons.home),
+          _NavigationItem(false, NavItem.porAtender, "por Atender",  FontAwesomeIcons.accusoft),
+          _NavigationItem(false, NavItem.enProcesoAtencion, "En proceso de atención",  FontAwesomeIcons.accusoft),
+          _NavigationItem(false, NavItem.atencionesFinalizadas, "Atenciones Finalizadas",  FontAwesomeIcons.accusoft),
+        ],
+        nombre: 'Atenciones'),
+    _NavHeader(
+        tipo: 3,
+        listItem: [
+          //_NavigationItem(false, NavItem.atenciones, "Atenciones", Icons.home),
         ],
         nombre: 'Reportes'),
   ];
@@ -56,27 +65,48 @@ class NavDrawerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final responsive = Responsive.of(context);
+    final preferences =Preferences();
     return Drawer(
       child: Container(
         child: ListView.builder(
-          padding: EdgeInsets.zero,
+          padding: EdgeInsets.only(bottom: responsive.hp(5)),
           itemCount: listGeneral.length,
           shrinkWrap: true,
           itemBuilder: (BuildContext context, int index) {
             return _buildItem(
-                listGeneral[index].header,
+              context,
+                listGeneral[index].tipo,
                 listGeneral[index].listItem,
                 listGeneral[index].nombre,
-                responsive);
+                responsive,preferences,);
           },
         ),
       ),
     );
   }
 
-  Widget _buildItem(bool header, List<_NavigationItem> listItem, String nombre,
-          Responsive res) =>
-      header ? _makeHeaderItem(res) : _listTitle(listItem, nombre, res);
+  Widget _buildItem(BuildContext context,int header, List<_NavigationItem> listItem, String nombre,
+          Responsive res,Preferences preferences) =>
+      (header == 1)
+          ? _makeHeaderItem(res)
+          : (header == 2)
+              ? _listTitle(listItem, nombre, res)
+              : Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: res.wp(5),
+                  ),
+                  child: MaterialButton(
+                      color: Colors.red,
+                      child: Text(
+                        'Cerrar session',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () {
+                        preferences.clearPreferences();
+                       Navigator.pushNamedAndRemoveUntil(
+                            context, 'login', (route) => false);
+                      }),
+                );
 
   Widget _makeHeaderItem(Responsive res) => UserAccountsDrawerHeader(
         accountName: Text(
@@ -186,8 +216,8 @@ class _NavigationItem {
 }
 
 class _NavHeader {
-  final bool header;
+  final int tipo;
   List<_NavigationItem> listItem;
   final String nombre;
-  _NavHeader({this.header, this.listItem, this.nombre});
+  _NavHeader({this.tipo, this.listItem, this.nombre});
 }

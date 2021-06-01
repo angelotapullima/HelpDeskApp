@@ -5,6 +5,7 @@ import 'package:help_desk_app/bloc/provider_bloc.dart';
 import 'package:help_desk_app/models/Usuario_model.dart';
 import 'package:help_desk_app/models/person_model.dart';
 import 'package:help_desk_app/utils/responsive.dart';
+import 'package:help_desk_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 class RegistrarUsuario extends StatefulWidget {
@@ -287,7 +288,7 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
                                     dropdownPerson = 'Seleccionar';
                                     usuarioBloc.obtenerUsuarios();
                                   } else {
-                                    print(
+                                    showToast(
                                         'debe Seleccionar un nivel de Usuario ');
                                   }
                                 }

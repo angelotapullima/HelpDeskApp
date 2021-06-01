@@ -6,7 +6,7 @@ import 'package:help_desk_app/models/area_model.dart';
 import 'package:help_desk_app/models/gerencia_model.dart';
 import 'package:help_desk_app/models/nivel_usuario_model.dart';
 import 'package:help_desk_app/models/person_model.dart';
-import 'package:help_desk_app/pages/Personas/lista_persona.dart';
+import 'package:help_desk_app/pages/Personas/lista_persona.dart'; 
 import 'package:help_desk_app/utils/responsive.dart';
 import 'package:provider/provider.dart';
 

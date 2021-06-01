@@ -99,15 +99,12 @@ class PersonApi {
           personModel.dni = decodedData['data'][i]['persona_dni'];
           personModel.nombre = decodedData['data'][i]['persona_nombre'];
           personModel.apellido = decodedData['data'][i]['persona_apellido'];
-          /*  'id_persona': '${person.idPerson}',
-        'id_gerencia': '${person.idGerencia}',
-        'id_area': '${person.idArea}',
-        'person_dni': '${person.dni}',
-        'person_nombre': '${person.nombre}',
-        'person_apellido': '${person.apellido}',
-        'id_nivel': '${person.nivelUsuario}', */
+          
+
+           if(personModel.idPerson!=null){
 
           await personDatabase.insertarPersona(personModel);
+          }
         }
 
         //Huevo estuvo aqui

@@ -13,5 +13,8 @@ enum NavItem {
   nivelUsuario,
   gestion,
   errorEquipos,
-  atenciones,
+  porAtender,
+  enProcesoAtencion,
+  atencionesFinalizadas,
+  cerrarSession
 }

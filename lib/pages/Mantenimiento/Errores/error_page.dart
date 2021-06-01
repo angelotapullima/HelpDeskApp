@@ -23,7 +23,8 @@ class _ErrorPageState extends State<ErrorPage> {
     final responsive = Responsive.of(context);
 
     final errorBloc = ProviderBloc.error(context);
-    errorBloc.obtenerErrores();
+    errorBloc.obtenerErroresPorTipo1();
+    errorBloc.obtenerErroresPorTipo2();
 
     final provider = Provider.of<BlocCargando>(context, listen: false);
     return Scaffold(
@@ -32,149 +33,301 @@ class _ErrorPageState extends State<ErrorPage> {
         builder: (BuildContext context, bool data, Widget child) {
           return Stack(
             children: [
-              StreamBuilder(
-                  stream: errorBloc.errorStream,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<List<ErrorModel>> snapshot) {
-                    if (snapshot.hasData) {
-                      if (snapshot.data.length > 0) {
-                        return ListView.builder(
-                          itemCount: snapshot.data.length + 1,
-                          itemBuilder: (context, index) {
-                            if (index == 0) {
-                              return Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: responsive.wp(3),
-                                ),
-                                child: Column(
-                                  children: [
-                                    RegistroError(responsive: responsive),
-                                    Row(
+              Column(
+                children: [
+                  StreamBuilder(
+                      stream: errorBloc.errorTipo1Stream,
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<ErrorModel>> snapshot) {
+                        if (snapshot.hasData) {
+                          if (snapshot.data.length > 0) {
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: snapshot.data.length + 1,
+                              itemBuilder: (context, index) {
+                                if (index == 0) {
+                                  return Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: responsive.wp(3),
+                                    ),
+                                    child: Column(
                                       children: [
-                                        Text(
-                                          'Errores Convencionales',
-                                          style: TextStyle(
-                                              fontSize: responsive.ip(1.7),
-                                              fontWeight: FontWeight.w700),
+                                        RegistroError(responsive: responsive),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Errores Convencionales',
+                                              style: TextStyle(
+                                                  fontSize: responsive.ip(1.7),
+                                                  fontWeight: FontWeight.w700),
+                                            ),
+                                            Spacer(),
+                                            Text(
+                                              'Opciones',
+                                              style: TextStyle(
+                                                  fontSize: responsive.ip(1.7),
+                                                  fontWeight: FontWeight.w700),
+                                            ),
+                                          ],
                                         ),
-                                        Spacer(),
-                                        Text(
-                                          'Opciones',
-                                          style: TextStyle(
-                                              fontSize: responsive.ip(1.7),
-                                              fontWeight: FontWeight.w700),
-                                        ),
+                                        Divider(
+                                          thickness: 2,
+                                        )
                                       ],
                                     ),
-                                    Divider(
-                                      thickness: 2,
-                                    )
-                                  ],
-                                ),
-                              );
-                            }
-                            int index2 = index - 1;
+                                  );
+                                }
+                                int index2 = index - 1;
 
-                            return Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: responsive.wp(3),
-                                vertical: responsive.hp(.5),
-                              ),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: responsive.wp(60),
-                                    child: Text(
-                                      '${snapshot.data[index2].errorNombre}',
-                                      style: TextStyle(
-                                        fontSize: responsive.ip(1.6),
-                                      ),
-                                    ),
+                                return Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: responsive.wp(3),
+                                    vertical: responsive.hp(.5),
                                   ),
-                                  Spacer(),
-                                  Container(
-                                    width: responsive.wp(23),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        IconButton(
-                                          icon: FaIcon(FontAwesomeIcons.edit),
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              PageRouteBuilder(
-                                                transitionDuration:
-                                                    const Duration(
-                                                        milliseconds: 400),
-                                                pageBuilder: (context,
-                                                    animation,
-                                                    secondaryAnimation) {
-                                                  return EditarError(
-                                                      error: snapshot
-                                                          .data[index2]);
-                                                  //return DetalleProductitos(productosData: productosData);
-                                                },
-                                                transitionsBuilder: (context,
-                                                    animation,
-                                                    secondaryAnimation,
-                                                    child) {
-                                                  return FadeTransition(
-                                                    opacity: animation,
-                                                    child: child,
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width: responsive.wp(60),
+                                        child: Text(
+                                          '${snapshot.data[index2].errorNombre}',
+                                          style: TextStyle(
+                                            fontSize: responsive.ip(1.6),
+                                          ),
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Container(
+                                        width: responsive.wp(23),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            IconButton(
+                                              icon:
+                                                  FaIcon(FontAwesomeIcons.edit),
+                                              onPressed: () {
+                                                Navigator.push(
+                                                  context,
+                                                  PageRouteBuilder(
+                                                    transitionDuration:
+                                                        const Duration(
+                                                            milliseconds: 400),
+                                                    pageBuilder: (context,
+                                                        animation,
+                                                        secondaryAnimation) {
+                                                      return EditarError(
+                                                          error: snapshot
+                                                              .data[index2]);
+                                                      //return DetalleProductitos(productosData: productosData);
+                                                    },
+                                                    transitionsBuilder:
+                                                        (context,
+                                                            animation,
+                                                            secondaryAnimation,
+                                                            child) {
+                                                      return FadeTransition(
+                                                        opacity: animation,
+                                                        child: child,
+                                                      );
+                                                    },
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                            IconButton(
+                                              icon: Icon(Icons.delete),
+                                              onPressed: () async {
+                                                final errorApi = ErrorApi();
+                                                provider.setValor(true);
+                                                final res = await errorApi
+                                                    .eliminarError(
+                                                        '${snapshot.data[index2].idError}');
+
+                                                if (res) {
+                                                  final errorDatabase =
+                                                      ErrorDatabase();
+
+                                                  await errorDatabase
+                                                      .deleteErrorPorId(
+                                                    '${snapshot.data[index2].idError}',
                                                   );
-                                                },
-                                              ),
-                                            );
-                                          },
+                                                }
+                                                provider.setValor(false);
+                                                errorBloc.obtenerErrores();
+                                              },
+                                            ),
+                                          ],
                                         ),
-                                        IconButton(
-                                          icon: Icon(Icons.delete),
-                                          onPressed: () async {
-                                            final errorApi = ErrorApi();
-                                            provider.setValor(true);
-                                            final res =
-                                                await errorApi.eliminarError(
-                                                    '${snapshot.data[index2].idError}');
-
-                                            if (res) {
-                                              final errorDatabase =
-                                                  ErrorDatabase();
-
-                                              await errorDatabase
-                                                  .deleteErrorPorId(
-                                                '${snapshot.data[index2].idError}',
-                                              );
-                                            }
-                                            provider.setValor(false);
-                                            errorBloc.obtenerErrores();
-                                          },
+                                      )
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          } else {
+                            return Column(
+                              children: [
+                                RegistroError(responsive: responsive),
+                                Text('Aún no se registro Errores')
+                              ],
+                            );
+                          }
+                        } else {
+                          return Column(
+                            children: [
+                              RegistroError(responsive: responsive),
+                              Text('Aún no se registro Errores')
+                            ],
+                          );
+                        }
+                      }),
+                  StreamBuilder(
+                      stream: errorBloc.errorTipo2Stream,
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<ErrorModel>> snapshot) {
+                        if (snapshot.hasData) {
+                          if (snapshot.data.length > 0) {
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: snapshot.data.length + 1,
+                              itemBuilder: (context, index) {
+                                if (index == 0) {
+                                  return Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: responsive.wp(3),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Otros Errores ',
+                                              style: TextStyle(
+                                                  fontSize: responsive.ip(1.7),
+                                                  fontWeight: FontWeight.w700),
+                                            ),
+                                            Spacer(),
+                                            Text(
+                                              'Opciones',
+                                              style: TextStyle(
+                                                  fontSize: responsive.ip(1.7),
+                                                  fontWeight: FontWeight.w700),
+                                            ),
+                                          ],
                                         ),
+                                        Divider(
+                                          thickness: 2,
+                                        )
                                       ],
                                     ),
-                                  )
-                                ],
-                              ),
+                                  );
+                                }
+                                int index2 = index - 1;
+
+                                return Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: responsive.wp(3),
+                                    vertical: responsive.hp(.5),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width: responsive.wp(60),
+                                        child: Text(
+                                          '${snapshot.data[index2].errorNombre}',
+                                          style: TextStyle(
+                                            fontSize: responsive.ip(1.6),
+                                          ),
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Container(
+                                        width: responsive.wp(23),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            IconButton(
+                                              icon:
+                                                  FaIcon(FontAwesomeIcons.edit),
+                                              onPressed: () {
+                                                Navigator.push(
+                                                  context,
+                                                  PageRouteBuilder(
+                                                    transitionDuration:
+                                                        const Duration(
+                                                            milliseconds: 400),
+                                                    pageBuilder: (context,
+                                                        animation,
+                                                        secondaryAnimation) {
+                                                      return EditarError(
+                                                          error: snapshot
+                                                              .data[index2]);
+                                                      //return DetalleProductitos(productosData: productosData);
+                                                    },
+                                                    transitionsBuilder:
+                                                        (context,
+                                                            animation,
+                                                            secondaryAnimation,
+                                                            child) {
+                                                      return FadeTransition(
+                                                        opacity: animation,
+                                                        child: child,
+                                                      );
+                                                    },
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                            IconButton(
+                                              icon: Icon(Icons.delete),
+                                              onPressed: () async {
+                                                final errorApi = ErrorApi();
+                                                provider.setValor(true);
+                                                final res = await errorApi
+                                                    .eliminarError(
+                                                        '${snapshot.data[index2].idError}');
+
+                                                if (res) {
+                                                  final errorDatabase =
+                                                      ErrorDatabase();
+
+                                                  await errorDatabase
+                                                      .deleteErrorPorId(
+                                                    '${snapshot.data[index2].idError}',
+                                                  );
+                                                }
+                                                provider.setValor(false);
+                                                errorBloc.obtenerErrores();
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              },
                             );
-                          },
-                        );
-                      } else {
-                        return Column(
-                          children: [
-                            RegistroError(responsive: responsive),
-                            Text('Aún no se registro Errores')
-                          ],
-                        );
-                      }
-                    } else {
-                      return Column(
-                        children: [
-                          RegistroError(responsive: responsive),
-                          Text('Aún no se registro Errores')
-                        ],
-                      );
-                    }
-                  }),
+                          } else {
+                            return Column(
+                              children: [
+                                RegistroError(responsive: responsive),
+                                Text('Aún no se registro Errores')
+                              ],
+                            );
+                          }
+                        } else {
+                          return Column(
+                            children: [
+                              RegistroError(responsive: responsive),
+                              Text('Aún no se registro Errores')
+                            ],
+                          );
+                        }
+                      }),
+                ],
+              ),
               (data)
                   ? Container(
                       height: double.infinity,

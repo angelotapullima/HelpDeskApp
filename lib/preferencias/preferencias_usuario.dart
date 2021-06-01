@@ -37,206 +37,108 @@ class Preferences {
 
 
 
-  get fechaCreacion {
-    return _prefs.getString('fechaCreacion');
+  get idUsuario {
+    return _prefs.getString('id_usuario');
   }
 
-  set fechaCreacion(String value) {
-    _prefs.setString('fechaCreacion', value);
+  set idUsuario(String value) {
+    _prefs.setString('id_usuario', value);
   }
 
-  get idUser {
-    return _prefs.getString('id_user');
+  get idPersona{
+    _prefs.getString('id_persona');
   }
 
-  set idUser(String value) {
-    _prefs.setString('id_user', value);
-  }
-
-  get idPerson{
-    _prefs.getString('id_person');
-  }
-
-  set idPerson(String value) {
-    _prefs.setString('id_person', value);
+  set idPersona(String value) {
+    _prefs.setString('id_persona', value);
   }
 
   get userNickname {
-    return _prefs.getString('user_nickname');
+    return _prefs.getString('usuario_nick');
   }
 
   set userNickname(String value) {
-    _prefs.setString('user_nickname', value);
+    _prefs.setString('usuario_nick', value);
   }
 
   get userEmail {
-    return _prefs.getString('user_email');
+    return _prefs.getString('usuario_email');
   }
 
   set userEmail(String value) {
-    _prefs.setString('user_email', value);
+    _prefs.setString('usuario_email', value);
   }
 
-  get userEmailValidateCode {
-    return _prefs.getString('user_email_validate_code');
+  get usuarioTelefono {
+    return _prefs.getString('usuario_telefono');
   }
 
-  set userEmailValidateCode(String value) {
-    _prefs.setString('user_email_validate_code', value);
+  set usuarioTelefono(String value) {
+    _prefs.setString('usuario_telefono', value);
   }
 
-  get image {
-    return _prefs.getString('image');
+  get usuarioEstado {
+    return _prefs.getString('usuario_estado');
   }
 
-  set image(String value) {
-    _prefs.setString('image', value);
+  set usuarioEstado(String value) {
+    _prefs.setString('usuario_estado', value);
   }
 
-  get personName {
-    return _prefs.getString('person_name');
+  get idGerencia {
+    return _prefs.getString('id_gerencia');
   }
 
-  set personName(String value) {
-    _prefs.setString('person_name', value);
+  set idGerencia(String value) {
+    _prefs.setString('id_gerencia', value);
   }
 
-  get personSurname {
-    return _prefs.getString('person_surname');
+  get idNivel {
+    return _prefs.getString('id_nivel');
   }
 
-  set personSurname(String value) {
-    _prefs.setString('person_surname', value);
+  set idNivel(String value) {
+    _prefs.setString('id_nivel', value);
+  }
+
+  get idArea {
+    return _prefs.getString('id_area');
+  }
+
+  set idArea(String value) {
+    _prefs.setString('id_area', value);
   }
 
   get personDni {
-    return _prefs.getString('person_dni');
+    return _prefs.getString('persona_dni');
   }
 
   set personDni(String value) {
-    _prefs.setString('person_dni', value);
-  }
-
-  get personBirth {
-    return _prefs.getString('person_birth');
-  }
-
-  set personBirth(String value) {
-    _prefs.setString('person_birth', value);
+    _prefs.setString('persona_dni', value);
   }
 
 
-  get personNumberPhone {
-    return _prefs.getString('person_number_phone');
+  get personaNombre {
+    return _prefs.getString('persona_nombre');
   }
 
-  set personNumberPhone(String value) {
-    _prefs.setString('person_number_phone', value);
+  set personaNombre(String value) {
+    _prefs.setString('persona_nombre', value);
   }
 
-  get personGenre {
-    return _prefs.getString('person_genre');
+  get personaApellido {
+    return _prefs.getString('persona_apellido');
   }
 
-  set personGenre(String value) {
-    _prefs.setString('person_genre', value);
+  set personaApellido(String value) {
+    _prefs.setString('persona_apellido', value);
   }
 
-  get personNacionalidad {
-    return _prefs.getString('person_nacionalidad');
+  get personaEstado {
+    return _prefs.getString('persona_estado');
   }
 
-  set personNacionalidad(String value) {
-    _prefs.setString('person_nacionalidad', value);
-  }
-
-  get rolNombre {
-    return _prefs.getString('rol_nombre');
-  }
-
-  set rolNombre(String value) {
-    _prefs.setString('rol_nombre', value);
-  }
-
-  get idRol {
-    return _prefs.getString('id_rol');
-  }
-
-  set idRol(String value) {
-    _prefs.setString('id_rol', value);
-  }
-
-  get personAddress {
-    return _prefs.getString('person_address');
-  }
-
-  set personAddress(String value) {
-    _prefs.setString('person_address', value);
-  }
-
-  get userNum {
-    return _prefs.getString('user_num');
-  }
-
-  set userNum(String value) {
-    _prefs.setString('user_num', value);
-  }
-
-  get userPosicion {
-    return _prefs.getString('user_posicion');
-  }
-
-  set userPosicion(String value) {
-    _prefs.setString('user_posicion', value);
-  }
-
-  get userHabilidad {
-    return _prefs.getString('user_habilidad');
-  }
-
-  set userHabilidad(String value) {
-    _prefs.setString('user_habilidad', value);
-  }
-
-  get ubigeoId {
-    return _prefs.getString('ubigeo_id');
-  }
-
-  set ubigeoId(String value) {
-    _prefs.setString('ubigeo_id', value);
-  }
-
-  get tieneNegocio {
-    return _prefs.getString('tiene_negocio');
-  }
-
-  set tieneNegocio(String value) {
-    _prefs.setString('tiene_negocio', value);
-  }
-
-  get token {
-    return _prefs.getString('token');
-  }
-
-  set token(String value) {
-    _prefs.setString('token', value);
-  }
-
-  get tokenFirebase {
-    return _prefs.getString('token_firebase');
-  }
-
-  set tokenFirebase(String value) {
-    _prefs.setString('token_firebase', value);
-  }
-
-
-
-  get ciudadID {
-    return _prefs.getString('ciudadID');
-  }
-
-  set ciudadID(String value) {
-    _prefs.setString('ciudadID', value);
+  set personaEstado(String value) {
+    _prefs.setString('persona_estado', value);
   }
 }

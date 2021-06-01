@@ -29,6 +29,17 @@ class UsuarioDatabase {
     return list;
   }
 
+
+  Future<List<UsuarioModel>> obtenerUsuarioPorDni(String id) async {
+    final db = await dbprovider.database;
+    final res = await db.rawQuery("SELECT * FROM Usuario WHERE dni='$id'");
+
+    List<UsuarioModel> list =
+        res.isNotEmpty ? res.map((c) => UsuarioModel.fromJson(c)).toList() : [];
+
+    return list;
+  }
+
   Future<List<UsuarioModel>> obtenerUsuarios() async {
     final db = await dbprovider.database;
     final res = await db.rawQuery("SELECT * FROM Usuario");

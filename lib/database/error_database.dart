@@ -38,10 +38,23 @@ class ErrorDatabase{
     return res;
   }
 
+  Future<List<ErrorModel>> obtenerErroresPorTipo(String tipo) async {
+    final db = await dbprovider.database;
+    final res =
+    await db.rawQuery("SELECT * FROM Error where errorTipo='$tipo' ");
+
+    List<ErrorModel> list = res.isNotEmpty
+        ? res.map((c) => ErrorModel.fromJson(c)).toList()
+        : [];
+
+    return list;
+  } 
+
+
   Future<List<ErrorModel>> obtenerErrores() async {
     final db = await dbprovider.database;
     final res =
-    await db.rawQuery("SELECT * FROM Error");
+    await db.rawQuery("SELECT * FROM Error ");
 
     List<ErrorModel> list = res.isNotEmpty
         ? res.map((c) => ErrorModel.fromJson(c)).toList()

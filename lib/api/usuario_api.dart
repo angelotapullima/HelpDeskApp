@@ -111,7 +111,10 @@ class UsuarioApi {
           personModel.dni = decodedData['data'][i]['persona_dni'];
           personModel.nombre = decodedData['data'][i]['persona_nombre'];
           personModel.apellido = decodedData['data'][i]['persona_apellido'];
+           if(personModel.idPerson!=null){
+
           await personDatabase.insertarPersona(personModel);
+          }
         }
 
         //Huevo estuvo aqui

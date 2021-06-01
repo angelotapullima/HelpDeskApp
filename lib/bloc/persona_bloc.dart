@@ -50,8 +50,8 @@ class PersonaBloc {
         personModel.idGerencia = resultPerson[i].idGerencia;
         personModel.idArea = resultPerson[i].idArea;
         personModel.nivelUsuario = resultPerson[i].nivelUsuario;
-        personModel.nombreGerencia = gerenciaList[0].nombreGerencia;
-        personModel.nombreArea = areaList[0].nombreArea;
+        personModel.nombreGerencia = (gerenciaList.length>0)?gerenciaList[0].nombreGerencia:'';
+        personModel.nombreArea = (areaList.length>0)?areaList[0].nombreArea:'';
         personModel.nombreNivelUsuario = nivelUList[0].nombreNivel;
 
         personasList.add(personModel);

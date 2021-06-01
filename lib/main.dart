@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:help_desk_app/api/area_api.dart';
-import 'package:help_desk_app/api/gerencia_api.dart';
-import 'package:help_desk_app/api/nivel_usuario_api.dart';
 import 'package:help_desk_app/bloc/blocDrawer/nav_drawer_bloc.dart';
 import 'package:help_desk_app/bloc/blocDrawer/nav_drawer_state.dart';
 import 'package:help_desk_app/bloc/provider_bloc.dart';
 import 'package:help_desk_app/drawer_widget.dart';
-import 'package:help_desk_app/pages/Atenciones/atenciones_page.dart';
+import 'package:help_desk_app/pages/Atenciones/atenciones_finalizadas.dart';
+import 'package:help_desk_app/pages/Atenciones/por_atender.dart';
+import 'package:help_desk_app/pages/Atenciones/proceso_de_atencion.dart';
 import 'package:help_desk_app/pages/Equipos/equipos_page.dart';
 import 'package:help_desk_app/pages/Mantenimiento/Area/area_page.dart';
 import 'package:help_desk_app/bloc/bloc_cargando.dart';
@@ -15,7 +14,9 @@ import 'package:help_desk_app/pages/Mantenimiento/Errores/error_page.dart';
 import 'package:help_desk_app/pages/Mantenimiento/Gerencia/gerencia_page.dart';
 import 'package:help_desk_app/pages/Personas/registro_persona.dart';
 import 'package:help_desk_app/pages/Usuarios/listar_usuarios.dart';
+import 'package:help_desk_app/pages/loginPage.dart';
 import 'package:help_desk_app/pages/soporte/errores_equipos.dart';
+import 'package:help_desk_app/pages/splash.dart';
 import 'package:help_desk_app/preferencias/preferencias_usuario.dart';
 import 'package:help_desk_app/utils/responsive.dart';
 import 'package:provider/provider.dart';
@@ -47,9 +48,11 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
               primarySwatch: Colors.blue,
               scaffoldBackgroundColor: Colors.white),
-          initialRoute: 'home',
+          initialRoute: 'splash',
           routes: {
             "home": (BuildContext context) => MyHomePage(),
+            "login": (BuildContext context) => LoginPage(),
+            "splash": (BuildContext context) => Splash(),
           },
         ),
       ),
@@ -67,18 +70,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _content;
 
   @override
-  void initState() { 
+  void initState() {
     super.initState();
     _bloc = NavDrawerBloc(NavDrawerState(NavItem.listarUsuario));
     _content = _getContentForState(_bloc.state.selectedItem);
-
-    final gerenciaApi =GerenciaApi();
-    final areaApi =AreaApi();
-    final nivelUsuarioApi=NivelUsuarioApi();
-
-    gerenciaApi.listarGerencia();
-    areaApi.listarAreas();
-    nivelUsuarioApi.listarNivelesUsuario();
   }
 
   @override
@@ -89,31 +84,35 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     final responsive = Responsive.of(context);
+    final preferences = Preferences();
     return BlocProvider<NavDrawerBloc>(
-        create: (BuildContext context) => _bloc,
-        child: BlocListener<NavDrawerBloc, NavDrawerState>(
-          listener: (BuildContext context, NavDrawerState state) {
-            setState(() {
-              _content = _getContentForState(state.selectedItem);
-            });
-          },
-          child: BlocBuilder<NavDrawerBloc, NavDrawerState>(
-            builder: (BuildContext context, NavDrawerState state) => Scaffold(
-              drawer: NavDrawerWidget("AskNilesh", "rathodnilsrk@gmail.com"),
-              appBar: AppBar(
-                title: _getAppbarTitle(state.selectedItem, responsive),
-                centerTitle: false,
-                brightness: Brightness.light,
-              ),
-              body: AnimatedSwitcher(
-                switchInCurve: Curves.easeInExpo,
-                switchOutCurve: Curves.easeOutExpo,
-                duration: Duration(milliseconds: 300),
-                child: _content,
-              ),
+      create: (BuildContext context) => _bloc,
+      child: BlocListener<NavDrawerBloc, NavDrawerState>(
+        listener: (BuildContext context, NavDrawerState state) {
+          setState(() {
+            _content = _getContentForState(state.selectedItem);
+          });
+        },
+        child: BlocBuilder<NavDrawerBloc, NavDrawerState>(
+          builder: (BuildContext context, NavDrawerState state) => Scaffold(
+            drawer: NavDrawerWidget(
+                "${preferences.personaNombre} ${preferences.personaApellido}",
+                "${preferences.userEmail}"),
+            appBar: AppBar(
+              title: _getAppbarTitle(state.selectedItem, responsive),
+              centerTitle: false,
+              brightness: Brightness.light,
+            ),
+            body: AnimatedSwitcher(
+              switchInCurve: Curves.easeInExpo,
+              switchOutCurve: Curves.easeOutExpo,
+              duration: Duration(milliseconds: 300),
+              child: _content,
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   _getAppbarTitle(NavItem state, Responsive res) {
@@ -152,7 +151,7 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       case NavItem.errores:
         return Row(
-          children: [ 
+          children: [
             SizedBox(
               width: res.wp(2),
             ),
@@ -171,10 +170,10 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ],
         );
-      
+
       case NavItem.gerencia:
         return Row(
-          children: [ 
+          children: [
             SizedBox(
               width: res.wp(2),
             ),
@@ -195,7 +194,7 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       case NavItem.area:
         return Row(
-          children: [ 
+          children: [
             SizedBox(
               width: res.wp(2),
             ),
@@ -216,7 +215,7 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       case NavItem.nivelUsuario:
         return Row(
-          children: [ 
+          children: [
             SizedBox(
               width: res.wp(2),
             ),
@@ -236,8 +235,8 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         );
       case NavItem.gestion:
-         return Row(
-          children: [ 
+        return Row(
+          children: [
             SizedBox(
               width: res.wp(2),
             ),
@@ -257,42 +256,79 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         );
       case NavItem.errorEquipos:
-          return Row(
-          children: [ 
+        return Row(
+          children: [
             SizedBox(
               width: res.wp(2),
             ),
             Text(
               'Soporte ',
               style: TextStyle(
-                fontSize: res.ip(2),
+                fontSize: res.ip(1.5),
               ),
             ),
             Icon(Icons.chevron_right),
             Text(
               'Equipos ',
               style: TextStyle(
-                fontSize: res.ip(2),
+                fontSize: res.ip(1.5),
               ),
             ),
           ],
-        );case NavItem.atenciones:
-          return Row(
-          children: [ 
+        );
+      case NavItem.porAtender:
+        return Row(
+          children: [
             SizedBox(
               width: res.wp(2),
             ),
             Text(
               'Atenciones ',
               style: TextStyle(
-                fontSize: res.ip(2),
+                fontSize: res.ip(1.5),
               ),
             ),
             Icon(Icons.chevron_right),
             Text(
-              'Home ',
+              'pendientes de atención ',
               style: TextStyle(
-                fontSize: res.ip(2),
+                fontSize: res.ip(1.5),
+              ),
+            ),
+          ],
+        );
+      case NavItem.enProcesoAtencion:
+        return Row(
+          children: [
+            Text(
+              'Atenciones ',
+              style: TextStyle(
+                fontSize: res.ip(1.5),
+              ),
+            ),
+            Icon(Icons.chevron_right),
+            Text(
+              'En proceso de atención ',
+              style: TextStyle(
+                fontSize: res.ip(1.5),
+              ),
+            ),
+          ],
+        );
+      case NavItem.atencionesFinalizadas:
+        return Row(
+          children: [
+            Text(
+              'Atenciones ',
+              style: TextStyle(
+                fontSize: res.ip(1.5),
+              ),
+            ),
+            Icon(Icons.chevron_right),
+            Text(
+              'Atenciones Finalizadas ',
+              style: TextStyle(
+                fontSize: res.ip(1.5),
               ),
             ),
           ],
@@ -322,8 +358,12 @@ class _MyHomePageState extends State<MyHomePage> {
         return ListarEquipos();
       case NavItem.errorEquipos:
         return ErroresEquipos();
-        case NavItem.atenciones:
+      case NavItem.porAtender:
         return AtencionesPage();
+      case NavItem.enProcesoAtencion:
+        return ProcesoDeAtencion();
+      case NavItem.atencionesFinalizadas:
+        return AtencionesFinalizadas();
       default:
         return Center(
           child: Text(

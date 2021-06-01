@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:help_desk_app/bloc/area_bloc.dart';
+import 'package:help_desk_app/bloc/atenciones_bloc.dart';
 import 'package:help_desk_app/bloc/equipos_bloc.dart';
 import 'package:help_desk_app/bloc/error_bloc.dart';
+import 'package:help_desk_app/bloc/fallas_errores_bloc.dart';
 import 'package:help_desk_app/bloc/gerencia_bloc.dart';
+import 'package:help_desk_app/bloc/loginBloc.dart';
 import 'package:help_desk_app/bloc/nivel_usuario_bloc.dart';
 import 'package:help_desk_app/bloc/persona_bloc.dart';
 import 'package:help_desk_app/bloc/usuario_bloc.dart';
@@ -18,6 +21,9 @@ class ProviderBloc extends InheritedWidget {
   final usuarioBloc = UsuarioBloc();
   final equiposBloc = EquiposBloc();
   final errorBloc = ErrorBloc();
+  final loginBloc = LoginBloc();
+  final fallasErroresBloc = FallasErroresBloc();
+  final atencionesBloc = AtencionesBloc();
 
   factory ProviderBloc({Key key, Widget child}) {
     if (_instancia == null) {
@@ -67,4 +73,20 @@ class ProviderBloc extends InheritedWidget {
     return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
         .errorBloc;
   }
+
+  static LoginBloc login(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
+        .loginBloc;
+  }
+
+  static FallasErroresBloc fallas(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
+        .fallasErroresBloc;
+  }
+
+  static AtencionesBloc atenciones(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())
+        .atencionesBloc;
+  }
+
 }

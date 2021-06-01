@@ -77,12 +77,37 @@ class DatabaseProvider {
             ' equipoMac TEXT'
             ')');
 
-
-            //errorTipo=0)?'Normal':'Otros'
-             await db.execute(' CREATE TABLE Error('
+        //errorTipo=0)?'Normal':'Otros'
+        await db.execute(' CREATE TABLE Error('
             ' idError TEXT PRIMARY KEY,'
             ' errorNombre TEXT,'
             ' errorTipo TEXT'
+            ')');
+
+        await db.execute(' CREATE TABLE FallaEquipos('
+            ' idFalla TEXT PRIMARY KEY,'
+            ' idSolicitante TEXT,'
+            ' idEquipo TEXT,'
+            ' idError TEXT,'
+            ' otroError TEXT,'
+            ' fecha TEXT,'
+            ' hora TEXT,'
+            ' detalleError TEXT,'
+            ' estado TEXT'
+            ')');
+
+
+
+             await db.execute(' CREATE TABLE Atenciones('
+            ' idAtencion TEXT PRIMARY KEY,'
+            ' idSoporte TEXT,'
+            ' horaRecepcion TEXT,'
+            ' idResponsable TEXT,'
+            ' gravedad TEXT,'
+            ' horaReparacion TEXT,'
+            ' idReceptorEquipo TEXT,'
+            ' horaDevolucion TEXT,'
+            ' estado TEXT'
             ')');
       },
     );
