@@ -50,7 +50,7 @@ class AreaPage extends StatelessWidget {
                                         Container(
                                           width: responsive.wp(33),
                                           child: Text(
-                                            'Areas',
+                                            'Áreas',
                                             style: TextStyle(
                                                 fontSize: responsive.ip(1.7),
                                                 fontWeight: FontWeight.w700),
@@ -256,7 +256,7 @@ class _RegistroGerenciaState extends State<RegistroGerencia> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Registro de Areas',
+                'Registro de Áreas',
                 style: TextStyle(
                     fontSize: widget.responsive.ip(2),
                     fontWeight: FontWeight.w700),
@@ -302,7 +302,7 @@ class _RegistroGerenciaState extends State<RegistroGerencia> {
                             color: Colors.black45,
                             fontSize: widget.responsive.ip(1.7),
                           ),
-                          hintText: 'Nombre Area'),
+                          hintText: 'Nombre Área'),
                       enableInteractiveSelection: false,
                       controller: _areaController,
                     ),

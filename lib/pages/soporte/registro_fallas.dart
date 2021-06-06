@@ -19,11 +19,8 @@ class ReporteFallas extends StatefulWidget {
 }
 
 class _ReporteFallasState extends State<ReporteFallas> {
-
-
   TextEditingController _otroErrorControler = new TextEditingController();
   TextEditingController _detalleErrorController = new TextEditingController();
-
 
   //datos Area
   String dropdownTipoError = '';
@@ -32,7 +29,6 @@ class _ReporteFallasState extends State<ReporteFallas> {
   String idError = 'Seleccionar';
 
   final keyForm = GlobalKey<FormState>();
-
 
   @override
   void dispose() {
@@ -278,11 +274,14 @@ class _ReporteFallasState extends State<ReporteFallas> {
 
                                       FallasModel fallasModel = FallasModel();
                                       fallasModel.idError = idError;
-                                      fallasModel.idSolicitante = preferences.idUsuario;
-                                      fallasModel.idEquipo = widget.equiposModel.idEquipo;
-                                      fallasModel.otroError = _otroErrorControler.text;
-                                      fallasModel.detalleError = _detalleErrorController.text;
-
+                                      fallasModel.idSolicitante =
+                                          preferences.idUsuario;
+                                      fallasModel.idEquipo =
+                                          widget.equiposModel.idEquipo;
+                                      fallasModel.otroError =
+                                          _otroErrorControler.text;
+                                      fallasModel.detalleError =
+                                          _detalleErrorController.text;
 
                                       provider.setValor(true);
                                       final res = await fallasApi
@@ -477,6 +476,7 @@ class _ReporteFallasState extends State<ReporteFallas> {
           actions: <Widget>[
             MaterialButton(
               onPressed: () async {
+                Navigator.pop(context);
                 Navigator.pop(context);
               },
               child: Text('Continuar'),

@@ -265,7 +265,7 @@ class _RegistroEquiposState extends State<RegistroEquipos> {
                                 height: responsive.hp(1),
                               ),
                               Text(
-                                'Area :',
+                                'Área :',
                                 style: TextStyle(
                                     fontSize: responsive.ip(1.6),
                                     fontWeight: FontWeight.w600),

@@ -312,16 +312,16 @@ class _ErrorPageState extends State<ErrorPage> {
                           } else {
                             return Column(
                               children: [
-                                RegistroError(responsive: responsive),
-                                Text('Aún no se registro Errores')
+                                 
+                                Text('Aún no se registro Otros Errores')
                               ],
                             );
                           }
                         } else {
                           return Column(
                             children: [
-                              RegistroError(responsive: responsive),
-                              Text('Aún no se registro Errores')
+                               
+                              Text('Aún no se registro Otros Errores')
                             ],
                           );
                         }

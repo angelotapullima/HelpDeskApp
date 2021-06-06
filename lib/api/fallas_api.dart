@@ -62,6 +62,7 @@ class FallasApi {
           fallasModel.otroError = decodedData['data'][i]['soporte_otro_error'].toString();
           fallasModel.fecha = decodedData['data'][i]['soporte_fecha'].toString();
           fallasModel.detalleError = decodedData['data'][i]['soporte_detalle'].toString();
+          fallasModel.idSolicitante = decodedData['data'][i]['id_usuario'].toString();
           fallasModel.estado = decodedData['data'][i]['soporte_estado'].toString();
 
           await fallasEquiposDatabase.insertarFallas(fallasModel);

@@ -16,40 +16,52 @@ class NavDrawerWidget extends StatelessWidget {
     _NavHeader(
         tipo: 2,
         listItem: [
-          _NavigationItem(false, NavItem.listarUsuario, "Listar",  FontAwesomeIcons.accusoft),
-          _NavigationItem(
-              false, NavItem.registarUsuarios, "reggistrar",  FontAwesomeIcons.accusoft),
+          _NavigationItem(false, NavItem.listarUsuario, "Listar",
+              FontAwesomeIcons.accusoft),
+          _NavigationItem(false, NavItem.registarUsuarios, "Registrar",
+              FontAwesomeIcons.accusoft),
         ],
         nombre: 'Usuarios'),
     _NavHeader(
         tipo: 2,
         listItem: [
-          _NavigationItem(false, NavItem.errores, "Errores",  FontAwesomeIcons.accusoft),
-          _NavigationItem(false, NavItem.gerencia, "Gerencia", FontAwesomeIcons.accusoft),
-          _NavigationItem(false, NavItem.area, "Area",  FontAwesomeIcons.accusoft),
           _NavigationItem(
-              false, NavItem.nivelUsuario, "Nivel de Usuario",  FontAwesomeIcons.accusoft),
+              false, NavItem.errores, "Errores", FontAwesomeIcons.accusoft),
+          _NavigationItem(
+              false, NavItem.gerencia, "Gerencia", FontAwesomeIcons.accusoft),
+          _NavigationItem(
+              false, NavItem.area, "Area", FontAwesomeIcons.accusoft),
+          _NavigationItem(false, NavItem.nivelUsuario, "Nivel de Usuario",
+              FontAwesomeIcons.accusoft),
         ],
         nombre: 'Mantenimiento'),
     _NavHeader(
         tipo: 2,
         listItem: [
-          _NavigationItem(false, NavItem.gestion, "Gestión", FontAwesomeIcons.accusoft,),
+          _NavigationItem(
+            false,
+            NavItem.gestion,
+            "Gestión",
+            FontAwesomeIcons.accusoft,
+          ),
         ],
         nombre: 'Equipos'),
     _NavHeader(
         tipo: 2,
         listItem: [
-          _NavigationItem(false, NavItem.errorEquipos, "reportar error equipos",
-              FontAwesomeIcons.accusoft),
+          _NavigationItem(false, NavItem.errorEquipos,
+              "Reportar error de equipos", FontAwesomeIcons.accusoft),
         ],
         nombre: 'Soporte'),
     _NavHeader(
         tipo: 2,
         listItem: [
-          _NavigationItem(false, NavItem.porAtender, "por Atender",  FontAwesomeIcons.accusoft),
-          _NavigationItem(false, NavItem.enProcesoAtencion, "En proceso de atención",  FontAwesomeIcons.accusoft),
-          _NavigationItem(false, NavItem.atencionesFinalizadas, "Atenciones Finalizadas",  FontAwesomeIcons.accusoft),
+          _NavigationItem(false, NavItem.porAtender, "Por atender",
+              FontAwesomeIcons.accusoft),
+          _NavigationItem(false, NavItem.enProcesoAtencion,
+              "En proceso de atención", FontAwesomeIcons.accusoft),
+          _NavigationItem(false, NavItem.atencionesFinalizadas,
+              "Atenciones finalizadas", FontAwesomeIcons.accusoft),
         ],
         nombre: 'Atenciones'),
     _NavHeader(
@@ -65,7 +77,7 @@ class NavDrawerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final responsive = Responsive.of(context);
-    final preferences =Preferences();
+    final preferences = Preferences();
     return Drawer(
       child: Container(
         child: ListView.builder(
@@ -75,18 +87,25 @@ class NavDrawerWidget extends StatelessWidget {
           itemBuilder: (BuildContext context, int index) {
             return _buildItem(
               context,
-                listGeneral[index].tipo,
-                listGeneral[index].listItem,
-                listGeneral[index].nombre,
-                responsive,preferences,);
+              listGeneral[index].tipo,
+              listGeneral[index].listItem,
+              listGeneral[index].nombre,
+              responsive,
+              preferences,
+            );
           },
         ),
       ),
     );
   }
 
-  Widget _buildItem(BuildContext context,int header, List<_NavigationItem> listItem, String nombre,
-          Responsive res,Preferences preferences) =>
+  Widget _buildItem(
+          BuildContext context,
+          int header,
+          List<_NavigationItem> listItem,
+          String nombre,
+          Responsive res,
+          Preferences preferences) =>
       (header == 1)
           ? _makeHeaderItem(res)
           : (header == 2)
@@ -96,16 +115,17 @@ class NavDrawerWidget extends StatelessWidget {
                     horizontal: res.wp(5),
                   ),
                   child: MaterialButton(
-                      color: Colors.red,
-                      child: Text(
-                        'Cerrar session',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () {
-                        preferences.clearPreferences();
-                       Navigator.pushNamedAndRemoveUntil(
-                            context, 'login', (route) => false);
-                      }),
+                    color: Colors.red,
+                    child: Text(
+                      'Cerrar sesion',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () {
+                      preferences.clearPreferences();
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, 'login', (route) => false);
+                    },
+                  ),
                 );
 
   Widget _makeHeaderItem(Responsive res) => UserAccountsDrawerHeader(

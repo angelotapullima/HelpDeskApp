@@ -144,7 +144,7 @@ class _EditarGerenciaState extends State<EditarGerencia> {
                               }
                             },
                             child: Text(
-                              'Registrar',
+                              'Guardar cambios',
                               style: TextStyle(
                                   fontSize: responsive.ip(1.5),
                                   color: Colors.white),

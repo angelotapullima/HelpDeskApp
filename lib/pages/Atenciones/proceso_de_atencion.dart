@@ -40,8 +40,10 @@ class ProcesoDeAtencion extends StatelessWidget {
                               fontSize: responsive.ip(1.5),
                             ),
                           ),
-                          Text((snapshot.data[index].nombreResponsable.isNotEmpty)?
-                            '${snapshot.data[index].nombreResponsable}':'-',
+                          Text(
+                            (snapshot.data[index].nombreResponsable.isNotEmpty)
+                                ? '${snapshot.data[index].nombreResponsable}'
+                                : '-',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: responsive.ip(1.5),
@@ -93,25 +95,26 @@ class ProcesoDeAtencion extends StatelessWidget {
                                 ),
                                 color: Colors.green,
                                 onPressed: () {
-                                    Navigator.push(
-                                  context,
-                                  PageRouteBuilder(
-                                    transitionDuration:
-                                        const Duration(milliseconds: 400),
-                                    pageBuilder: (context, animation,
-                                        secondaryAnimation) {
-                                      return FinalizarAtencion(fallas:snapshot.data[index]);
-                                      //return DetalleProductitos(productosData: productosData);
-                                    },
-                                    transitionsBuilder: (context, animation,
-                                        secondaryAnimation, child) {
-                                      return FadeTransition(
-                                        opacity: animation,
-                                        child: child,
-                                      );
-                                    },
-                                  ),
-                                ); 
+                                  Navigator.push(
+                                    context,
+                                    PageRouteBuilder(
+                                      transitionDuration:
+                                          const Duration(milliseconds: 400),
+                                      pageBuilder: (context, animation,
+                                          secondaryAnimation) {
+                                        return FinalizarAtencion(
+                                            fallas: snapshot.data[index]);
+                                        //return DetalleProductitos(productosData: productosData);
+                                      },
+                                      transitionsBuilder: (context, animation,
+                                          secondaryAnimation, child) {
+                                        return FadeTransition(
+                                          opacity: animation,
+                                          child: child,
+                                        );
+                                      },
+                                    ),
+                                  );
                                 },
                               )
                             ],

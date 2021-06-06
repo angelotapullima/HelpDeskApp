@@ -25,8 +25,9 @@ class LoginApi {
 
       if (code == 1) {
         //final prodTemp = Data.fromJson(decodedData['data']);
-        prefs.idUsuario = decodedData['data']['id_usuario'];
-        prefs.idPersona = decodedData['data']['id_persona'];
+        var valorID = decodedData['data']['id_persona'];
+        prefs.idUsuario = valorID;
+        prefs.idPersona = valorID;
         prefs.userNickname = decodedData['data']['usuario_nick'];
         prefs.userEmail = decodedData['data']['usuario_email'];
         prefs.usuarioTelefono = decodedData['data']['usuario_telefono'];
@@ -36,7 +37,6 @@ class LoginApi {
         prefs.idArea = decodedData['data']['id_area'];
         prefs.personDni = decodedData['data']['persona_dni'];
         prefs.personaNombre = decodedData['data']['persona_nombre'];
-        prefs.personaApellido = decodedData['data']['persona_apellido'];
         prefs.personaApellido = decodedData['data']['persona_apellido'];
         
 

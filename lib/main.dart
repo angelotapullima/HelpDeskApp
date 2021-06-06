@@ -125,7 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text('Home'),
             Icon(Icons.chevron_right),
-            Text(' listar Usuario'),
+            Text(' Listar Usuario'),
           ],
         );
       case NavItem.registarUsuarios:
@@ -156,16 +156,16 @@ class _MyHomePageState extends State<MyHomePage> {
               width: res.wp(2),
             ),
             Text(
-              'Manteniento ',
+              'Mantenimiento ',
               style: TextStyle(
-                fontSize: res.ip(2),
+                fontSize: res.ip(1.7),
               ),
             ),
             Icon(Icons.chevron_right),
             Text(
               'Errores ',
               style: TextStyle(
-                fontSize: res.ip(2),
+                fontSize: res.ip(1.7),
               ),
             ),
           ],
@@ -178,16 +178,16 @@ class _MyHomePageState extends State<MyHomePage> {
               width: res.wp(2),
             ),
             Text(
-              'Manteniento ',
+              'Mantenimiento ',
               style: TextStyle(
-                fontSize: res.ip(2),
+                fontSize: res.ip(1.7),
               ),
             ),
             Icon(Icons.chevron_right),
             Text(
               'Gerencia ',
               style: TextStyle(
-                fontSize: res.ip(2),
+                fontSize: res.ip(1.7),
               ),
             ),
           ],
@@ -199,16 +199,16 @@ class _MyHomePageState extends State<MyHomePage> {
               width: res.wp(2),
             ),
             Text(
-              'Manteniento ',
+              'Mantenimiento ',
               style: TextStyle(
-                fontSize: res.ip(2),
+                fontSize: res.ip(1.7),
               ),
             ),
             Icon(Icons.chevron_right),
             Text(
-              'Areas ',
+              'Áreas ',
               style: TextStyle(
-                fontSize: res.ip(2),
+                fontSize: res.ip(1.7),
               ),
             ),
           ],
@@ -220,16 +220,16 @@ class _MyHomePageState extends State<MyHomePage> {
               width: res.wp(2),
             ),
             Text(
-              'Manteniento ',
+              'Mantenimiento ',
               style: TextStyle(
-                fontSize: res.ip(2),
+                fontSize: res.ip(1.7),
               ),
             ),
             Icon(Icons.chevron_right),
             Text(
-              'Areas ',
+              'Nivel usuario ',
               style: TextStyle(
-                fontSize: res.ip(2),
+                fontSize: res.ip(1.7),
               ),
             ),
           ],

@@ -586,6 +586,7 @@ class _FinalizarAtencionState extends State<FinalizarAtencion> {
             MaterialButton(
               onPressed: () async {
                 Navigator.pop(context);
+                Navigator.pop(context);
               },
               child: Text('Continuar'),
             ),

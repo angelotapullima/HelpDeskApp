@@ -5,7 +5,7 @@ import 'package:help_desk_app/pages/Atenciones/atencion_en_proceso.dart';
 import 'package:help_desk_app/utils/responsive.dart';
 
 class AtencionesPage extends StatelessWidget {
-  const AtencionesPage({Key key}) : super(key: key);
+  const AtencionesPage({Key key}) : super(key: key); 
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class AtencionesPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Angelo Tapullima Del Aguila',
+                        '${snapshot.data[index].nombreSolicitante} ',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: responsive.ip(1.5),
@@ -47,7 +47,7 @@ class AtencionesPage extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            '${snapshot.data[index].fecha} -  ${snapshot.data[index].estado}',
+                            '${snapshot.data[index].fecha}',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: responsive.ip(1.5),

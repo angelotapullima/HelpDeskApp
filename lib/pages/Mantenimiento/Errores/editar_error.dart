@@ -102,7 +102,7 @@ class _EditarErrorState extends State<EditarError> {
                                 color: Colors.black45,
                                 fontSize: responsive.ip(1.7),
                               ),
-                              hintText: 'Nombre Gerencia'),
+                              hintText: 'Nombre Error'),
                           enableInteractiveSelection: false,
                           controller: _errorNombreController,
                         ),
@@ -142,7 +142,7 @@ class _EditarErrorState extends State<EditarError> {
                               }
                             },
                             child: Text(
-                              'Registrar',
+                              'Guardar Cambios',
                               style: TextStyle(
                                   fontSize: responsive.ip(1.5),
                                   color: Colors.white),

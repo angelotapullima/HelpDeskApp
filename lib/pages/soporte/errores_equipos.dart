@@ -32,7 +32,7 @@ class ErroresEquipos extends StatelessWidget {
                           horizontal: responsive.wp(2),
                           vertical: responsive.hp(2)),
                       child: Text(
-                        'Equipos De Area 7 \nseleccione un equipo para reportar un error',
+                        'EQUIPOS POR AREA  \nSeleccione un equipo para reportar un error',
                         style: TextStyle(
                           color: Colors.blue[900],
                           fontWeight: FontWeight.bold,

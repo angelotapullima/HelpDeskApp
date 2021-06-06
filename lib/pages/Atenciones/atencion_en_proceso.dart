@@ -359,7 +359,7 @@ class _AtenderSoporteState extends State<AtenderSoporte> {
     } else {
       for (int i = 0; i < list.length; i++) {
         if (dato == '${list[i].nombre} ${list[i].apellido}') {
-          idPerson = list[i].dni.toString();
+          idPerson = list[i].idPerson.toString();
         }
       }
     }
@@ -420,6 +420,7 @@ class _AtenderSoporteState extends State<AtenderSoporte> {
           actions: <Widget>[
             MaterialButton(
               onPressed: () async {
+                Navigator.pop(context);
                 Navigator.pop(context);
               },
               child: Text('Continuar'),
