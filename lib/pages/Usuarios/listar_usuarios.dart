@@ -78,7 +78,7 @@ class ListarUsuarios extends StatelessWidget {
                                       ),
                                       Spacer(),
                                       Container(
-                                        width: responsive.wp(23),
+                                        width: responsive.wp(28),
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,

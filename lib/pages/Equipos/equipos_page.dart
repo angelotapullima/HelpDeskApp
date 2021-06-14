@@ -59,7 +59,7 @@ class ListarEquipos extends StatelessWidget {
                                 Row(
                                   children: [
                                     Expanded(
-                                                                          child: Column(
+                                      child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
@@ -77,9 +77,12 @@ class ListarEquipos extends StatelessWidget {
                                           ),
                                         ],
                                       ),
-                                    ), SizedBox(width: responsive.wp(2),),
+                                    ),
+                                    SizedBox(
+                                      width: responsive.wp(2),
+                                    ),
                                     Container(
-                                      width: responsive.wp(23),
+                                      width: responsive.wp(27),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,

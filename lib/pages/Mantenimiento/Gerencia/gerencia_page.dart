@@ -93,7 +93,7 @@ class _GerenciaPageState extends State<GerenciaPage> {
                                   ),
                                   Spacer(),
                                   Container(
-                                    width: responsive.wp(23),
+                                    width: responsive.wp(27),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
