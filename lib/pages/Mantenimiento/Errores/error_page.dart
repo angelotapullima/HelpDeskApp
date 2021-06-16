@@ -442,7 +442,7 @@ class _RegistroErrorState extends State<RegistroError> {
                 final errorBloc = ProviderBloc.error(context);
                 provider.setValor(true);
                 final res =
-                    await errorApi.guardarError(_errorController.text, '0');
+                    await errorApi.guardarError(_errorController.text, '1');
 
                 provider.setValor(false);
 

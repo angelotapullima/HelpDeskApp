@@ -84,8 +84,11 @@ class AreaPage extends StatelessWidget {
                             int index2 = index - 1;
 
                             return Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: responsive.wp(3),
+                              padding: EdgeInsets.only(
+                                left: responsive.wp(3),
+                                right: responsive.wp(3),
+                                bottom: responsive.hp(2),
+
                               ),
                               child: Row(
                                 children: [
